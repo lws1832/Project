@@ -1,19 +1,17 @@
 
 import * as React from 'react';
 import { StyleSheet, Keyboard,Text, View } from 'react-native';
-import Profile from './Components/Menu/Profile';
 
+
+import { Container } from 'react-dom';
+
+import RootStack from './Components/navigators/Stack';
 
 export default function App() {
 
   return (
-   <View style={styles.main}>
-     <Profile />
-     <Text>git pushasdasdasd
-       asdsadasdasd
-     </Text>
-   </View>
-  );
+      <RootStack />
+  )
 }
 
 const styles=StyleSheet.create({

@@ -1,10 +1,10 @@
 import React from "react";
-import { View,Text,StyleSheet } from "react-native";
+import { View,Text,StyleSheet ,Button} from "react-native";
 
 export default function PrivacyPages(){
     return(
         <View style={styles.container}>
-            <Text>개인정보 이용약관 페이지</Text>
+            <Text>이용약관 페이지</Text>
         </View>
     )
 } 

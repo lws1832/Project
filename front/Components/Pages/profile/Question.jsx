@@ -1,10 +1,10 @@
 import React from "react";
-import { View,Text,StyleSheet } from "react-native";
+import { View,Text,StyleSheet,Button } from "react-native";
 
 export default function QuestionPages(){
     return(
         <View style={styles.container}>
-            <Text>문의/의견 페이지</Text>
+           <Text>의견 보내기</Text>
         </View>
     )
 } 
