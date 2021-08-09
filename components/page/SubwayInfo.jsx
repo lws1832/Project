@@ -2,33 +2,25 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons, AntDesign, FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 
+import Top from '../layout/Top';
+import Subject from '../layout/subject';
+import Menu from '../layout/Menu';
+
 export default function SubwayInfo(){
 
     return(
         <View style={styles.container}>
 
-            {/* header */}
-            <View style={styles.header}>
-                <View style={styles.iconBack}>
-                    <AntDesign name="left" size={40} color="rgb(41, 128, 185)" />    
-                </View>
-                <View style={styles.iconBookmark}>
-                    <FontAwesome name="star" size={40} color="rgb(241, 196, 15)" />
-                </View>
-            </View>
+            <Top />
+            <Subject />
 
-            {/* subject */}
-            <View style={styles.subject}>
-                <Text style={styles.title}>실시간 역 정보</Text>
-                <View style={{flexDirection:"row"}}>
+            {/* content1 */}
+            <View style={styles.content1}>
+                <View style={{ flexDirection: "row" }}>
                     <Text style={styles.line2}>2</Text>
                     <Text style={styles.line5}>5</Text>
                     <Text style={styles.subtitle}>동대문역사문화공원역</Text>
                 </View>
-            </View>
-
-            {/* content1 */}
-            <View style={styles.content1}>
                 <View style={styles.iconSubway}>
                     <MaterialCommunityIcons name="subway-variant" size={24} color="#000" />
                 </View>
@@ -55,10 +47,10 @@ export default function SubwayInfo(){
                     </View>
                 </View>
                 <View style={styles.station}>
-                    <Text style={{...styles.stationSort, ...styles.stationLeft}}>동대문역사박물관역</Text>
+                    <Text style={{...styles.stationSort, ...styles.stationLeft}}>종로3가역</Text>
+                    <Text style={styles.stationSort}>을지로4가역</Text>
                     <Text style={styles.stationSort}>동대문역사박물관역</Text>
-                    <Text style={styles.stationSort}>동대문역사박물관역</Text>
-                    <Text style={{...styles.stationSort, ...styles.staitonRight}}>동대문역사박물관역</Text>
+                    <Text style={{...styles.stationSort, ...styles.staitonRight}}>청구역</Text>
                 </View>
             </View>
 
@@ -95,20 +87,8 @@ export default function SubwayInfo(){
                 </View>
             </View>
             
-            {/* menu */}
-            <View style={styles.menu}>
-                <View style={styles.menuBox}>
-                    <View style={styles.menuSort}>
-                        <AntDesign name="search1" size={40} color="#000" />
-                    </View>
-                    <View style={styles.menuSort}>
-                    <Octicons name="bookmark" size={40} color="black" />
-                    </View>
-                    <View style={styles.menuSort}>
-                        <Ionicons name="person" size={40} color="#000" />
-                    </View>
-                </View>
-            </View>
+            <Menu />
+
         </View>
     );
 }
@@ -119,48 +99,16 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:"#fff",
     },
-    header:{
-        flex:1,
-        marginTop:10,
-        flexDirection:'row',
-    },
-    subject:{
-        flex:2,
-        justifyContent:"flex-start",
-        alignItems:"flex-start",
-    },
     content1:{
-        flex:2,
+        flex:3,
     },
     content2:{
         flex:4,
         marginHorizontal:20,
         marginBottom:10,
     },
-    menu:{
-        flex:1,
-        flexDirection:'row',
-    },
 
-    /* header */
-    iconBack:{
-        paddingVertical:10,
-        paddingHorizontal:20,
-    },
-    iconBookmark:{
-        paddingVertical:10,
-        paddingHorizontal:20,
-        marginLeft:"auto",
-    },
-
-    /* subject */
-    title:{
-        paddingHorizontal:20,
-        paddingVertical:10,
-        fontSize:40,
-        fontWeight:"bold",
-        color:"rgb(41, 128, 185)",
-    },
+    /* content1 */
     subtitle:{
         fontSize:30,
         fontWeight:"bold",
@@ -186,8 +134,6 @@ const styles = StyleSheet.create({
         backgroundColor:"rgb(142, 68, 173)",
         borderRadius:20,
     },
-
-    /* content1 */
     iconSubway:{
         flex:1,
         marginHorizontal:27,
@@ -253,27 +199,4 @@ const styles = StyleSheet.create({
         marginLeft:10,
         color:"red",
     },
-
-    /* menu */
-    menuBox:{
-        flex:1,
-        flexDirection:"row",
-        alignItems:"center",
-    },
-    menuSort:{
-        flex:1,
-        alignItems:"center"
-    },
-
-    bar:{
-        width:'100%',
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center",
-        backgroundColor:"green",
-    },
-    textContainer:{
-        paddingHorizontal:20,
-        alignItems:"flex-start",
-    }
 });
