@@ -16,10 +16,39 @@ export const colors = {
     secondary: "#4d3636",
     tertiary: "#e6e6e6",
     alternative:"#999999",
+    fff:"#fff",
 };
 
 const statusBarHeight = Constants.statusBarHeight;
 
+//공지사항
+export const ViewNotice = styled.Text`
+    background-color: ${colors.fff};
+    overflow: hidden;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 18px;
+    color: #424242;
+    width: 350px;
+    height: 200px;
+    padding: 10px 50px;
+    border:1px solid #000000;
+    border-radius: 6px;
+`
+
+// flex: 1,
+// fontSize: 18,
+// paddingVertical: 10,
+// borderRadius: 6,
+// borderWidth: 1,
+// borderColor: "black",
+// backgroundColor:"#fff",
+// color: '#424242',
+// justifyContent:"center",
+// alignItems:"center",
+// paddingHorizontal:50,
+// width: 350,
+// height: 300,
 export const Container = styled.SafeAreaView`
     background-color: ${colors.tertiary};
     padding: 20px;
