@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, StyleSheet, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { EvilIcons } from '@expo/vector-icons';
 
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
-// import Menu from '../layout/Menu';
 
 export default function Search() {
   const [value, onChangeText] = React.useState('지역 또는 지하철 명을 입력하세요');
@@ -38,7 +37,6 @@ export default function Search() {
       </View>
 
       <Space />
-      {/* <Menu /> */}
 
     </View>
   );

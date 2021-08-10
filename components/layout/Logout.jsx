@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
-import { AntDesign, FontAwesome} from '@expo/vector-icons';
+import { AntDesign} from '@expo/vector-icons';
 
-export default function Top(){
+export default function Logout(){
+    const [isLogin,setIsLogin] = useState(false);
+
     const alertTest = () => {
         console.log('클릭함');
         Alert.alert("클릭함");
@@ -11,20 +13,16 @@ export default function Top(){
     return(
         <>
             <View style={styles.header}>
-                <View style={styles.iconBack}>
-                    <TouchableOpacity
-                        style={styles.iconTouch}
-                        onPress={() => { alertTest() }}
-                    >
-                        <AntDesign name="left" size={32} color="rgb(41, 128, 185)" />
-                    </TouchableOpacity>
-                </View>
                 <View style={styles.iconBookmark}>
                     <TouchableOpacity
                         style={styles.iconTouch}
                         onPress={() => { alertTest() }}
                     >
-                        <FontAwesome name="star" size={32} color="rgb(241, 196, 15)" />
+                        {
+                            isLogin
+                            ? <AntDesign name="logout" size={32} color="black" />
+                            : <AntDesign name="login" size={32} color="black" />
+                        }
                     </TouchableOpacity>
                 </View>
             </View>

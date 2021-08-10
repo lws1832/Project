@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
-// import Menu from '../layout/Menu';
 
 export default function Bookmark(){
   const alertTest = () => {
@@ -37,7 +36,7 @@ export default function Bookmark(){
           {item.list}
         </Text>
         <TouchableOpacity onPress={() => { alertTest() }}>
-          <Text style={styles.delBtn}>삭제</Text>
+          <Text style={styles.delBtn}>해제</Text>
         </TouchableOpacity>
       </View>
     )
@@ -55,7 +54,7 @@ export default function Bookmark(){
           <View style={styles.category}>
             <Text style={{ ...styles.categorySort, flex:1}}>호선</Text>
             <Text style={{ ...styles.categorySort, flex:4, paddingLeft:13, textAlign:"left"}}>역 이름</Text>
-            <Text style={{ ...styles.categorySort, flex:1}}>삭제</Text>
+            <Text style={{ ...styles.categorySort, flex:1}}>해제</Text>
           </View>
           <View style={{ flex:10, justifyContent: 'space-between' }}>
             <FlatList
@@ -67,8 +66,7 @@ export default function Bookmark(){
       </View>
 
       <Space />
-      {/* <Menu /> */}
-    
+
     </View>
   );
 }

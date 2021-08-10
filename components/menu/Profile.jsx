@@ -1,20 +1,57 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Entypo } from '@expo/vector-icons'; 
 
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
-// import Menu from '../layout/Menu';
+import Logout from '../layout/Logout';
 
 export default function Profile({navigation}){
-    const alertTest = () => {
-        console.log('클릭함');
-        Alert.alert("클릭함");
+    const list = [
+        {
+            id: 1,
+            icon:'user',
+            navigate:'내 정보',
+            title:'내 정보',
+        },
+        {
+            id: 2,
+            icon:'blackboard',
+            navigate:'공지사항',
+            title:'공지사항',
+        },
+        {
+            id: 3,
+            icon:'chat',
+            navigate:'문의 또는 의견 작성',
+            title:'문의 또는 의견 작성',
+        },
+        {
+            id: 4,
+            icon:'clipboard',
+            navigate:'이용 약관 및 개인 정보 처리 방침',
+            title:'이용 약관 및 개인 정보 처리 방침',
+        },
+    ]
+
+    const renderList = ({item}) => {
+        return(
+            <TouchableOpacity
+                style={styles.menuTouch}
+                onPress={() => { navigation.navigate(item.navigate); }}
+            >
+                <View style={{marginTop:2, marginRight:20}}>
+                    <Entypo name={item.icon} size={12} color="black" />
+                </View>
+                <Text style={styles.menuText}>{item.title}</Text>
+            </TouchableOpacity>
+        );
     }
 
     return(
         <View style={styles.container}>
 
-            <Space />
+            <Logout />
             <Subject />
 
             {/* content */}
@@ -23,39 +60,14 @@ export default function Profile({navigation}){
                     <Text style={styles.userName}>이우성님</Text>
                 </View>
                 <View style={{flex:5, marginVertical:50}}>
-
-                    <TouchableOpacity
-                        style={styles.menuTouch}
-                        onPress={()=>{navigation.navigate('내 정보');}}
-                    >
-                        <Text style={styles.menuText}>내 정보</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.menuTouch}
-                        onPress={()=>{navigation.navigate('공지사항');}}
-                    >
-                        <Text style={styles.menuText}>공지사항</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.menuTouch}
-                        onPress={()=>{navigation.navigate('문의 또는 의견 작성');}}
-                    >
-                        <Text style={styles.menuText}>문의 또는 의견 작성</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity
-                        style={styles.menuTouch}
-                        onPress={()=>{navigation.navigate('이용 약관 및 개인 정보 처리 방침');}}
-                    >
-                        <Text style={styles.menuText}>이용 약관 및 개인 정보 처리 방침</Text>
-                    </TouchableOpacity>
+                    <FlatList
+                        data={list}
+                        renderItem={renderList}
+                    />
                 </View>
             </View>
 
             <Space />
-            {/* <Menu /> */}
 
         </View>
     )
@@ -78,6 +90,7 @@ const styles=StyleSheet.create({
         fontWeight:"bold",
     },
     menuTouch:{
+        flexDirection:"row",
         marginHorizontal:30,
         marginVertical:10,
         paddingHorizontal:15,

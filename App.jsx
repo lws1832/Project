@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 import Loading from './components/Loading';
 import NaviMenu from './components/navigator/NaviMenu';
+import Login from './components/Login';
 
 export default function App(){
   const [isLoading,setIsLoading] = useState(true);
-  console.log('1 : ', isLoading);
 
   useEffect(()=>{
-    setIsLoading(false);
-    console.log('2 : ',isLoading);
+    // setIsLoading(false);
+    setTimeout(() => {
+    	setIsLoading(false);
+    }, 3000);
   },[])
 
   return isLoading ? <Loading /> : <NaviMenu />;

@@ -1,25 +1,45 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function Loading(){
-    return(
+
+export default function Loading() {
+    return (
         <View style={styles.container}>
-            <StatusBar barStyle="dark-content" />
-            <Text style={styles.text}>로딩 중</Text>
+
+            {/* content */}
+            <StatusBar barStyle={'default'} />
+            <View style={styles.content}>
+                <MaterialCommunityIcons name="subway-variant" size={100} color="#fff" />
+                <View style={{marginLeft:10}}>
+                    <Text style={styles.subTitle}>내가 찾는 지하철</Text>
+                    <Text style={styles.title}>어디?</Text>
+                </View>
+            </View>
+
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        justifyContent:"flex-start",
-        paddingHorizontal:30,
-        paddingVertical:100,
-        backgroundColor:"#FDF6AA",
+    /* area */
+    container: {
+        flex: 1,
+        backgroundColor: "#2980b9",
     },
-    text:{
-        color:"#2c2c2c",
-        fontSize:35,
+    content: {
+        marginHorizontal:40,
+        marginVertical:150,
+    },
+
+    /* content */
+    title:{
+        fontSize:50,
+        color:"#fff",
+    },
+    subTitle:{
+        marginTop:20,
+        fontSize:20,
+        color:"#fff",
     }
-})
+});

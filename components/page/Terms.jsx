@@ -1,17 +1,24 @@
-import React from "react";
-import { View,Text,StyleSheet } from "react-native";
+import React from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native';
+
+import TermsList from './TermsList';
 
 export default function Terms(){
+
     return(
-        <View style={styles.container}>
-            <Text>개인정보 이용약관 페이지</Text>
-        </View>
+        <ScrollView>
+            <View style={styles.container}>
+                <TermsList />
+            </View>
+        </ScrollView>
     )
-} 
-const styles=StyleSheet.create({
+}
+
+const styles = StyleSheet.create({
+    /* area */
     container:{
-        flex: 1,
-        justifyContent:"center",
-        alignItems:"center"
-    }
-  })
+        flex:1,
+        marginHorizontal:20,
+        marginVertical:20,
+    },
+});
