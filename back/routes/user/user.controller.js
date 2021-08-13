@@ -1,13 +1,10 @@
 const { sequelize, User } = require('../../models');
 
-let read = async (req,res) => {
+// Read
+const read = async (req,res) => {
     console.log('/user/read 접근');
 
-    let result = await User.findAll({
-        where:{
-            user_image: null,
-        },
-    })
+    let result = await sequelize.query('select * from user;')
     .then(result => {
     	console.log("success");
     })
@@ -20,7 +17,8 @@ let read = async (req,res) => {
     });
 }
 
-let create = async (req,res) => {
+// Create
+const create = async (req,res) => {
     console.log('/user/create 접근');
 
     let {id, nickname, user_email, user_image} = req.body;
@@ -44,7 +42,8 @@ let create = async (req,res) => {
     });
 }
 
-let update = async (req, res) => {
+// Update
+const update = async (req, res) => {
     console.log('/user/update 접근');
 
     let {id, nickname} = req.body;
@@ -69,7 +68,8 @@ let update = async (req, res) => {
     })
 }
 
-let destroy = async (req, res) => {
+// delete
+const destroy = async (req, res) => {
     console.log('/user/destroy 접근');
 
     let {id, nickname} = req.body;

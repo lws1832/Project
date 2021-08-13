@@ -54,8 +54,9 @@ export default function InquireList(){
     return(
         <>
             {
-                data.map(e => (
+                data.map((e,k) => (
                     <InquireData
+                        key={e.id}
                         title={e['title']}
                         inqDate={e['inqDate']}
                         content={e['content']}

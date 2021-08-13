@@ -13,7 +13,6 @@ export default function Inquire(){
                         style={styles.textBox}
                     />
                 </View>
-                
             </View>
             <View style={{flex:3, ...styles.box}}>
                 <Text style={styles.title}>문의 내용</Text>

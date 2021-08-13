@@ -130,8 +130,9 @@ export default function TermsList(){
     return(
         <>
             {
-                data.map(e => (
+                data.map((e,k) => (
                     <TermsData
+                        key={e.id}
                         title={e['title']}
                         content={e['content']}
                     />

@@ -6,13 +6,13 @@ const noticeRouter = require('./notice');
 const inquireRouter = require('./inquire');
 const termsRouter = require('./terms');
 
-router.get('/notice', noticeRouter);
-router.get('/inquire', inquireRouter);
-router.get('/terms', termsRouter);
+router.use('/notice', noticeRouter);
+router.use('/inquire', inquireRouter);
+router.use('/terms', termsRouter);
 
 // Controller
 const profileController = require('./profile.controller');
 
-router.get('/', profileController);
+router.use('/', profileController);
 
 module.exports = router;
