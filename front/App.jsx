@@ -14,5 +14,5 @@ export default function App(){
     }, 3000);
   }, [])
 
-  return isLoading ? <Loading /> : <NaviMenu />;
+  return isLoading ? <Loading /> : <Login />;
 }
