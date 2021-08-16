@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 
 const NaviMenu = () => {
     return(
-        <NavigationContainer>
+        
             <Tab.Navigator
                 screenOptions={ ({route}) => ({
                     "headerShown":false, // 헤더 감추기
@@ -47,7 +47,7 @@ const NaviMenu = () => {
                 <Tab.Screen name="menuBookmark" component={BookmarkScreen} />
                 <Tab.Screen name="menuProfile" component={ProfileScreen} />
             </Tab.Navigator>
-        </NavigationContainer>
+        
     );
 }
 

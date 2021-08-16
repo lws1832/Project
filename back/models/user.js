@@ -4,12 +4,12 @@ const Sequelize = require('sequelize');
 module.exports = class User extends Sequelize.Model{
     static init(sequelize){
         return super.init({
-            id:{    // 고유 ID값(필수)
+
+            idx:{    // 고유 ID값(필수)
                 type:Sequelize.STRING(100),
-                allowNull:false,
+                allowNull:true,
                 unique:true,
-                primaryKey: true,
-            },      // 닉네임(필수)
+            },        // 닉네임(필수)
             nickname:{
                 type:Sequelize.STRING(100),
                 allowNull:false,
@@ -18,7 +18,11 @@ module.exports = class User extends Sequelize.Model{
             user_email:{
                 type:Sequelize.STRING(50),
                 allowNull:true,
-            },      // 이미지(선택)
+            },
+            user_password:{
+                type:Sequelize.STRING(100),
+                allowNull:false,
+            },       // 이미지(선택)
             user_image:{
                 type:Sequelize.STRING(100),
                 allowNull:true,
