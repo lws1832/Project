@@ -14,10 +14,10 @@ const NaviMenu = () => {
         <NavigationContainer>
             <Tab.Navigator
                 screenOptions={ ({route}) => ({
-                    "headerShown":false, // 헤더 감추기
-                    "tabBarActiveTintColor": "#1B2228", // 활성화 색
+                    "headerShown":false,                    // 헤더 감추기
+                    "tabBarActiveTintColor": "#1B2228",   // 활성화 색
                     "tabBarInactiveTintColor": "#C7CDD3", // 비활성화 색
-                    "tabBarShowLabel": false, // 텍스트 감추기
+                    "tabBarShowLabel": false,               // 텍스트 감추기
                     tabBarIcon: ({focused, color, size}) => { 
                         let iconName;
                         switch (route.name) {
