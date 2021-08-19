@@ -1,0 +1,4 @@
+test/
+trash/
+node_modules/
+.env
