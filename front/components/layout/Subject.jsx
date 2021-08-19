@@ -1,10 +1,16 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
+import UserName from '../user';
+import Googlelogin from '../Googlelogin';
 export default function Subject(){
+    
+       
+
     return(
         <View style={styles.subject}>
             <Text style={styles.title}>페이지 정보</Text>
+            <UserName />
+         
         </View>
     );
 }

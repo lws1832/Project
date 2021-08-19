@@ -24,7 +24,10 @@ import React, { useState } from 'react';
 
 // React navigation stack
 import RootStack from './navigators/RootStack';
-
+import Signup from './components/Signup';
+import NaviMenu from './components/navigator/NaviMenu';
+import Googlelogin from './components/Googlelogin';
+import Username from './components/user';
 // apploading
 import AppLoading from 'expo-app-loading';
 
@@ -57,6 +60,8 @@ export default function App() {
   return (
     <CredentialsContext.Provider value={{ storedCredentials, setStoredCredentials }}>
       <RootStack />
+    
+      
     </CredentialsContext.Provider>
   );
 }

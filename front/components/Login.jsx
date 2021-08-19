@@ -2,39 +2,29 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, StatusBar, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
-export default function Login() {
-    const [id, setId] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [userEmail, setUserEmail] = useState('');
 
-    const userSubmit = async (a, b, c) => {
-        if (id == ''){
-            Alert.alert('id 입력은 필수 사항입니다.');
-        } else if (nickname == ''){
+export default function Login({navigation}) {
+    const [user_password, setUser_password] = useState('');
+    const [user_email, setUser_email] = useState('');
+
+    const userSubmit = async (user_password, user_email ) => {
+        if (user_password == ''){
+            Alert.alert('비밀번호 입력은 필수 사항입니다.');
+        } else if (user_email == ''){
             Alert.alert('넥네임 입력은 필수 사항입니다.');
         } else{
             try{
-                console.log('111까지 옴');
-                let data = {
-                    id:a,
-                    nickname:b,
-                    user_email:c,
-                }
-                let url = `http://192.168.0.9:3000/user/create`;
+                // console.log('111까지 옴');
+              
+                let url = `http://192.168.0.3:3000/user/read`;
 
                 try{
-                    console.log('222까지 옴');
-                    await fetch (url,{
-                        method:'POST',
-                        body:JSON.stringify(data),
-                        headers:{
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    console.log('333까지 옴');
-                    setId('');
-                    setNickname('');
-                    setUserEmail('');
+                    // console.log('222까지 옴');
+                    await fetch (url);
+                    // console.log('333까지 옴');
+
+                    // setUser_password('');
+                    // setUser_email('');
                 } catch (e){
                     console.log(e);
                 }
@@ -55,39 +45,35 @@ export default function Login() {
                     <Text style={styles.title}>필수항목</Text>
                     <TextInput
                         autoFocus
-                        placeholder="고유id(숫자)"
-                        type="text"
-                        name="id"
-                        value={id}
-                        onChangeText={text => setId(text)}
-                        style={styles.textBox}
-                    />
-                    <TextInput
-                        placeholder="nickname"
-                        type="text"
-                        name="nickname"
-                        value={nickname}
-                        onChangeText={text => setNickname(text)}
-                        style={styles.textBox}
-                    />
-                </View>
-                <View style={styles.halfContainer}>
-                <Text style={styles.title}>선택항목</Text>
-                    <TextInput
-                        placeholder="E-mail"
+                        placeholder="이메일"
                         type="text"
                         name="user_email"
-                        value={userEmail}
-                        onChangeText={text => setUserEmail(text)}
+                        value={user_email}
+                        onChangeText={text => setUser_email(text)}
                         style={styles.textBox}
                     />
+                    <TextInput
+                        placeholder="비밀번호"
+                        type="password"
+                        name="password"
+                        value={user_password}
+                        onChangeText={password => setUser_password(password)}
+                        style={styles.textBox}
+                        secureTextEntry={true}
+                    />
+                </View>
+                
+                <View style={styles.halfContainer}>
+                <Text onPress={()=>navigation.navigate('Signup')}>회원가입 페이지이동</Text>
+                
                     <TouchableOpacity
+                       
                         onPress={
-                            () => userSubmit(id, nickname, userEmail)
+                            () => userSubmit( user_email, user_password)
                         }
                         style={styles.submitBtn}
                     >
-                        <Text>전송</Text>
+                        <Text onPress={()=>navigation.navigate('NaviMeun')}>로그인</Text>
                     </TouchableOpacity>
                 </View>
             </View>
