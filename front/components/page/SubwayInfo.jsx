@@ -1,61 +1,17 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 
-import lineReducer from '../Store/lineReducer';
 import Space from '../layout/Space';
 
 export default function SubwayInfo({ route }){
-    // // useReducer로 호선 출력 작업 중
-    const [lineIcon, dispatch] = useReducer(lineReducer, 0);
+    const [lineArr, setLineArr] = useState([]); // 호선
 
     useEffect(() => {
-        console.log('날것 : ', route.params.line);
-        const str = route.params.line;
-        const arr = str.split(',');
-        arr.map(v => {
-            switch(v){
-                case 1001:
-                    console.log('11');
-                    dispatch({ type:'line 1'});
-                case 1002:
-                    console.log('22');
-                    dispatch({ type:'line 2'});
-                case 1003:
-                    console.log('33');
-                    dispatch({ type:'line 3'});
-                case 1004:
-                    console.log('44');
-                    dispatch({ type:'line 4'});
-                case 1005:
-                    console.log('55');
-                    dispatch({ type:'line 5'});
-                case 1006:
-                    console.log('66');
-                    dispatch({ type:'line 6'});
-                case 1007:
-                    console.log('77');
-                    dispatch({ type:'line 7'});
-                case 1008:
-                    console.log('88');
-                    dispatch({ type:'line 8'});
-                case 1009:
-                    console.log('99');
-                    dispatch({ type:'line 9'});
-                default:
-                    return v;
-            }
-        })
-        
-
-
-    //     console.log('searchInfo route : ', route.params);
-
-    //     // if (route.params.line == 1001){
-    //     //     dispatch({ type:'line 1'});
-    //     // }
+        console.log('before split : ', route);
+        const str = route.params.line;  // 배열에 한 번 담고,
+        setLineArr(str.split(','));     // 콤마 빼고 따로 나눠서 변수에 다시 배열로 담음
     }, []);
-
 
     return(
         <View style={styles.container}>
@@ -64,9 +20,25 @@ export default function SubwayInfo({ route }){
 
             {/* content1 */}
             <View style={styles.content1}>
+
+                {/* 호선, 역 이름 */}
                 <View style={{ flexDirection: "row" }}>
-                    <Text style={styles.line2}>2</Text>
-                    <Text style={styles.line5}>5</Text>
+                    {
+                        lineArr.map(v => {
+                            return(
+                                <Text style={styles.line2}>
+                                    {
+                                        // 63 경의중앙선, 65 공항철도, 67 경춘선, 71 수인분당선, 77 신분당선
+                                        console.log(v[2],v[3],v[2]+v[3]),
+                                        v[2] == 0 && v[3]
+                                    }
+                                    {
+                                        v[2] != 0 && v[2]+v[3]
+                                    }
+                                </Text>
+                            )
+                        })
+                    }
                     <Text style={styles.subtitle}>{route.params.stnName}역</Text>
                 </View>
                 <View style={styles.iconSubway}>
@@ -161,26 +133,6 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         color:"#000",
     },
-    line2:{
-        marginLeft:20,
-        marginRight:3,
-        paddingHorizontal:10,
-        paddingVertical:5,
-        fontSize:20,
-        color:"#fff",
-        backgroundColor:"rgb(22, 160, 133)",
-        borderRadius:20,
-    },
-    line5:{
-        marginRight:3,
-        paddingHorizontal:10,
-        paddingVertical:5,
-        padding:5,
-        fontSize:20,
-        color:"#fff",
-        backgroundColor:"rgb(142, 68, 173)",
-        borderRadius:20,
-    },
     iconSubway:{
         flex:1,
         marginHorizontal:27,
@@ -245,5 +197,147 @@ const styles = StyleSheet.create({
     arriveTime:{
         marginLeft:10,
         color:"red",
+    },
+
+    /* lineColor */
+    line1:{
+        marginLeft:20,
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#0052A4",
+        borderRadius:20,
+    },
+    line2:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#009D3E",
+        borderRadius:20,
+    },
+    line3:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#EF7C1C",
+        borderRadius:20,
+    },
+    line4:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#00A5DE",
+        borderRadius:20,
+    },
+    line5:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#996CAC",
+        borderRadius:20,
+    },
+    line6:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#CD7C2F",
+        borderRadius:20,
+    },
+    line7:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#747F00",
+        borderRadius:20,
+    },
+    line8:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#EA545D",
+        borderRadius:20,
+    },
+    line9:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#BB8336",
+        borderRadius:20,
+    },
+    line63:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#77C4A3",
+        borderRadius:20,
+    },
+    line65:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#0090D2",
+        borderRadius:20,
+    },
+    line67:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#0C8E72",
+        borderRadius:20,
+    },
+    line71:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#F5A200",
+        borderRadius:20,
+    },
+    line71:{
+        marginRight:3,
+        paddingHorizontal:10,
+        paddingVertical:5,
+        padding:5,
+        fontSize:20,
+        color:"#fff",
+        backgroundColor:"#D4003B",
+        borderRadius:20,
     },
 });

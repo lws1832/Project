@@ -10,15 +10,16 @@ const Stack = createNativeStackNavigator();
 const NaviLogin = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen 
-                    options={{headerShown:false}}
-                    name="Googlelogin"
-                    component={GoogleLogin}
-                />
+            <Stack.Navigator
+                screenOptions={ () => ({
+                    "headerShown":false,
+                })}
+            >
+                <Stack.Screen name="Googlelogin" component={GoogleLogin} />
                 <Stack.Screen name="NaviMeun" component={NaviMenu} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
+
 export default NaviLogin;

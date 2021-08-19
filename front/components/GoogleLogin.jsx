@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import * as Google from 'expo-google-app-auth';
-import UserName from './page/UserName';
+import NaviMenu from './navigator/NaviMenu';
 
 const GoogleLogin = ({ navigation }) => {
   const [googleSubmitting, setGoogleSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLogin, setIslogin] = useState(false);
 
   const handleGoogleLogin = async () => {
     setGoogleSubmitting(true);
@@ -19,11 +19,8 @@ const GoogleLogin = ({ navigation }) => {
       .logInAsync(config)
       .then((result) => {
         const { type, accessToken, user } = result;
-        // console.log('타입은 먼가요? ',type)
-        // console.log('무슨값이 오나요? ',result)
 
         if (type == 'success') {
-          // Google.logOutAsync({accessToken, ...config})
           try {
             let { id, name, email } = result.user;
             let { accessToken } = result;
@@ -34,7 +31,7 @@ const GoogleLogin = ({ navigation }) => {
               email: email,
             }
             console.log('데이터가 왔나요?', data)
-            const url = 'http://172.30.1.6:3000/user/create';
+            const url = 'http://192.168.0.14:3000/user/create';
             try {
 
               fetch(url, {
@@ -49,75 +46,29 @@ const GoogleLogin = ({ navigation }) => {
 
             } catch (error) { console.log(error, '1단계에서 에러') }
           } catch (error) { console.log(error, '2단계에서 에러') }
-          // const { email, name, photoUrl, id } = user;
-
-          // persistLogin({ email, name, photoUrl, id }, 'Google 로그인성공', 'SUCCESS');
 
         } else {
           console.log('Google 로그인이 취소 되었습니다.');
         }
-
-        setLoading(false)
-        console.log('로그인 완료')
-        setGoogleSubmitting(false);
+        setIslogin(true);
       })
 
-      .catch((error) => {
-        console.log('구글 로그인 에러발생');
-        console.log(error);
-        setGoogleSubmitting(false);
+      .catch((e) => {
+        console.log(e);
       });
   };
 
-  const handleGoogleLogout = async () => {
-    const config = {
-      iosClientId: `697029683209-5sooo7am5l8g1e2btlrcccktml36cqnf.apps.googleusercontent.com`,
-      androidClientId: `697029683209-tm8ldidid8kcl8ulksosgkvk58uns74v.apps.googleusercontent.com`,
-    };
-    const { type, accessToken, user } = await Google.logInAsync(config);
-    const { name } = user;
-    if (type === 'success') {
-      /* Log-Out */
-      try {
-        await Google.logOutAsync({ accessToken, name, ...config });
-        console.log("로그아웃 되라", accessToken, name)
-      } catch (err) {
-        throw new Error(err)
-      }
-    }
-  }
-
-  const Time = () => {
-    setTimeout(() => {
-      navigation.navigate('NaviMeun')
-    }, 3000);
-  }
-  return (
+  return(
     <>
-      {loading ?
-        <TouchableOpacity
-          onPress={handleGoogleLogin} google={true}>
-          <Text google={true} style={styles.submitBtn}
-          // onPress={()=>navigation.navigate('NaviMeun')}
-          >구글 로그인</Text>
-        </TouchableOpacity> :
-        <Text><UserName />님 로그인중입니다.</Text>
+      {
+        !isLogin
+        ? (
+            <TouchableOpacity onPress={handleGoogleLogin} google={true}>
+              <Text google={true} style={styles.submitBtn}>구글 로그인</Text>
+            </TouchableOpacity>
+        )
+        : <NaviMenu isLogin={isLogin} />
       }
-      <TouchableOpacity
-        onPress={handleGoogleLogout}
-      >
-        <Text
-          style={styles.submitBtn}
-          onPress={() => navigation.navigate('NaviMeun')}
-        >구글 로그아웃</Text>
-      </TouchableOpacity>
-
-      <Text
-        style={styles.submitBtn}
-        onPress={() => navigation.navigate('NaviMeun')}>
-        검새창이동
-      </Text>
-
     </>
   )
 }

@@ -2,6 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { StyleSheet, View, ScrollView, TextInput, Text, TouchableOpacity} from 'react-native';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import _ from 'lodash';
 
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
@@ -15,6 +16,7 @@ statnNm		지하철역명
 statnFid	이전지하철역ID
 statnId		다음지하철역ID
 subwayList	연계호선ID(당역포함)
+trainLineNm 도착지방면
 */
 
 export default function Search({navigation}){
@@ -60,6 +62,15 @@ export default function Search({navigation}){
         return name == word && wordLength != 0;
     }
 
+    // 
+    let uniqData;
+    const ChangeText = value => {
+        const data = subway.filter( item => { 
+            return matchName(item.statnNm, value) == true;
+        })
+        uniqData = _.uniqBy(data, "trainLineNm")
+    }
+
     const postData = () => {
         console.log('Data extracting..');
 
@@ -68,6 +79,8 @@ export default function Search({navigation}){
         })
         .map(item => {
             return (
+                console.log('444',item.subwayList),
+                console.log('555',item.statnNm),
                 setLine(item.subwayList),
                 setStnName(item.statnNm),
                 subway
@@ -75,7 +88,7 @@ export default function Search({navigation}){
                     return item.statnTid == v.statnId
                 })
                 .map(v => {
-                    return console.log('콘솔확인용11',v),setNextStn(v.statnNm);
+                    return setNextStn(v.statnNm);
                 }),
                 subway
                 .filter(v => {
@@ -116,6 +129,7 @@ export default function Search({navigation}){
                                     type="text"
                                     value={searchText}
                                     onChangeText={text => setSearctText(text)}
+                                    onChange={ChangeText(searchText)}
                                     style={styles.textBox}
                                 />
                                 <View style={styles.button}>
@@ -130,8 +144,8 @@ export default function Search({navigation}){
                                             {/* 검색 결과 카테고리 */}
                                             <View style={styles.resultCategory}>
                                                 <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>호선</Text>
-                                                <Text style={{...styles.ctgText, flex:2.5}}>역 이름</Text>
-                                                <Text style={{...styles.ctgText, flex:1.5}}>역 방향</Text>
+                                                <Text style={{...styles.ctgText, flex:2}}>역 이름</Text>
+                                                <Text style={{...styles.ctgText, flex:2}}>역 방향</Text>
                                                 <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>북마크</Text>
                                             </View>
                                             
@@ -143,90 +157,80 @@ export default function Search({navigation}){
                                                     })
                                                     .map((item, k) => {
                                                         return (
-                                                            <View
-                                                                key={k}
-                                                                style={styles.result}
-                                                            >
-                                                                {/* 호선 */}
-                                                                <View style={{...styles.listText, flex:1, flexDirection:"row", alignItems:"center"}}>
-                                                                    <MaterialCommunityIcons
-                                                                        name={`numeric-${item.subwayList[3]}-circle`}
-                                                                        size={16}
-                                                                        color="purple"
-                                                                    />
-                                                                    {
-                                                                        item.subwayList[8] != null
-                                                                        ? (
-                                                                            <MaterialCommunityIcons
-                                                                                name={`numeric-${item.subwayList[8]}-circle`}
-                                                                                size={16}
-                                                                                color="purple"
-                                                                            />
-                                                                        )
-                                                                        : null
-                                                                    }
-                                                                </View>
-                                                                
-                                                                {/* 역 이름 */}
-                                                                {/* {
-                                                                    subway
-                                                                    .filter(v => {
-                                                                        return v.statnNm == item.ordkey != v.ordkey;
-                                                                    })
-                                                                    .map((v, k) => {
-                                                                        console.log('check : ',v.statnNm)
-                                                                        return <Text key={k} style={{...styles.listText, flex:2}}>
-                                                                            {v.statnNm}
-                                                                        </Text>
-                                                                    })
-                                                                } */}
-
-                                                                {
-                                                                    // console.log('전체 : ', item.statnFid)
-                                                                    // console.log('11 : ',
-                                                                    //     item
-                                                                    // )
-                                                                }
-
-                                                                <TouchableOpacity
-                                                                    style={{flex:2.5}}
-                                                                    onPressIn={() => { postData () }}
-                                                                    onPressOut={() => {navigation.navigate('실시간 역 정보', {
-                                                                        line, stnName, preeStn, preStn, nextStn,
-                                                                    })}}
+                                                            k >= uniqData.length
+                                                            ? null
+                                                            : (
+                                                                <View
+                                                                    key={k}
+                                                                    style={styles.result}
                                                                 >
-                                                                    <Text style={styles.listText}>{item.statnNm}</Text>
-                                                                </TouchableOpacity>
+                                                                    {/* 호선 */}
+                                                                    <View style={{ ...styles.listText, flex: 1, flexDirection: "row", alignItems: "center" }}>
+                                                                        <MaterialCommunityIcons
+                                                                            name={`numeric-${item.subwayList[3]}-circle`}
+                                                                            size={16}
+                                                                            color="purple"
+                                                                        />
+                                                                            {
+                                                                                item.subwayList[8] != null
+                                                                                ? (
+                                                                                    <MaterialCommunityIcons
+                                                                                        name={`numeric-${item.subwayList[8]}-circle`}
+                                                                                        size={16}
+                                                                                        color="purple"
+                                                                                    />
+                                                                                )
+                                                                                : null
+                                                                            }
+                                                                    </View>
 
-                                                                {/* 역 방향 */}
-                                                                <Text style={{...styles.listText, flex:1.5}}>{item.bstatnNm}행</Text>
-
-                                                                {/* 다음 역 */}
-                                                                {/* {
-                                                                    subway
-                                                                    .filter(v => {
-                                                                        return item.statnTid == v.statnId
-                                                                    })
-                                                                    .map((v, k) => {
-                                                                        if (k == 1){
-                                                                            return <Text key={k} style={{...styles.listText, flex:2}}>{v.statnNm}</Text>
+                                                                    <TouchableOpacity
+                                                                        style={{ flex: 2 }}
+                                                                        onPressIn={() => { postData() }}
+                                                                        onPressOut={() => {
+                                                                            navigation.navigate('실시간 역 정보', {
+                                                                                line, stnName, preeStn, preStn, nextStn,
+                                                                            })
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            k >= uniqData.length
+                                                                            ? null
+                                                                            : (
+                                                                                <Text style={styles.listText}>
+                                                                                    {uniqData[k].statnNm}
+                                                                                </Text>
+                                                                            )
                                                                         }
-                                                                    })
-                                                                } */}
+                                                                    </TouchableOpacity>
 
-                                                                {/* 북마크 */}
-                                                                <TouchableOpacity style={{...styles.listText, flex:1, alignItems:"center"}}>
-                                                                    <AntDesign
-                                                                        name="star"
-                                                                        size={20}
-                                                                        color={
-                                                                            bookmark == null /* 디비 연결 후 !=로 수정 */
+                                                                    {/* 역 방향 */}
+                                                                    <Text style={{ ...styles.listText, flex: 2 }}>
+                                                                            {
+                                                                                k >= uniqData.length
+                                                                                ? null
+                                                                                : (
+                                                                                    <Text>
+                                                                                        {uniqData[k].trainLineNm}
+                                                                                    </Text>
+                                                                                )
+                                                                            }
+                                                                    </Text>
+
+                                                                    {/* 북마크 */}
+                                                                    <TouchableOpacity style={{ ...styles.listText, flex: 1, alignItems: "center" }}>
+                                                                        <AntDesign
+                                                                            name="star"
+                                                                            size={20}
+                                                                            color={
+                                                                                bookmark == null /* 디비 연결 후 !=로 수정 */
                                                                                 ? "rgb(255, 204, 0)"
                                                                                 : "lightgray"
-                                                                        }
-                                                                    />
-                                                                </TouchableOpacity>
-                                                            </View>
+                                                                            }
+                                                                        />
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            )
                                                         )
                                                     })
                                                 }

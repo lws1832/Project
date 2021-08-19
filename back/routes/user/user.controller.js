@@ -71,22 +71,21 @@ let update = async (req, res) => {
 let destroy = async (req, res) => {
     console.log('/user/destroy 접근');
 
-    // let {id} = req.body;
-    // console.log('req.body : ',id);
+    let { id } = req.body;
+    console.log('req.body : ', id);
 
     let result = await User.destroy({
-
         where: {
-            idx: 1,
+            id: id,
         }
     })
-        .then(result => {
-            console.log("success");
-        })
-        .catch(err => {
-            console.log("fail");
-        })
-
+    .then(result => {
+        console.log("success");
+    })
+    .catch(err => {
+        console.log("fail");
+    })
+    
     res.json({
         result,
     });

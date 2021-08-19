@@ -6,7 +6,7 @@ export default function UserName() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch('http://172.30.1.6:3000/user/read', {
+        fetch('http://192.168.0.14:3000/user/read', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
