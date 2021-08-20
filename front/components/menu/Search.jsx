@@ -104,49 +104,6 @@ export default function Search({navigation}){
         setPreeStn(preesFid[0].statnNm)
         setArvTime(data.barvlDt)
         setTrnlineNm(data.trainLineNm)
-
-        // subway.filter(item => {
-        //     return matchName(item.statnNm, searchText) == true;
-        // })
-        // .map((item,key) => {
-        //     key={key}
-        //     return (
-        //         setLine(item.subwayList),
-        //         setStnName(item.statnNm),
-        //         subway
-        //         .filter(v => {
-        //             return item.statnTid == v.statnId
-        //         })
-        //         .map((v,key) => {
-        //             key={key}
-        //             console.log('여기는 다오는데',v.trainLineNm)
-        //             return (
-        //                 setArvTime(v.barvlDt),setNextStn(v.statnNm)
-        //                 ,setTrnlineNm(v.trainLineNm),
-        //                 console.log('왜 한개만 오냐고',trnlineNm)
-        //             ) 
-        //         }),
-        //         subway
-        //         .filter(v => {
-        //             return item.statnFid == v.statnId
-        //         })
-        //         .map((v,key) => {
-        //             key={key}
-        //             return (
-        //                 setPreStn(v.statnNm),
-        //                 subway
-        //                 .filter(e => {
-        //                     return v.statnFid == e.statnId
-        //                 })
-        //                 .map((e,key) => {
-        //                     key={key}
-        //                     return setPreeStn(e.statnNm);
-        //                 })
-        //             )
-        //         })
-        //     )
-        // })
-        // console.log('ppp : ',stnName, preeStn, preStn, nextStn, arvTime,trnlineNm);
     }
 
     return (
