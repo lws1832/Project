@@ -31,11 +31,7 @@ const GoogleLogin = ({ navigation }) => {
               email: email,
             }
             console.log('데이터가 왔나요?', data)
-<<<<<<< HEAD
             const url = 'http://192.168.0.18:3000/user/create';
-=======
-            const url = 'http://192.168.0.6:3000/user/create';
->>>>>>> main
             try {
 
               fetch(url, {
