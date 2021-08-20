@@ -20,7 +20,7 @@ export default function Inquire(){
         } else{
             try{
                 console.log('111까지 옴');
-                let url = `http://192.168.0.6:3000/inquire/create`;
+                let url = `http://192.168.0.14:3000/inquire/create`;
                 let data = {
                     title:title,
                     content:content,

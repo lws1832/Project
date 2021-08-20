@@ -6,7 +6,7 @@ import Space from '../layout/Space';
 import Subject from '../layout/Subject';
 import Logout from '../layout/Logout';
 
-export default function Profile({navigation}){
+export default function Profile({navigation, isLogin}){
     const list = [
         {
             id: 1,
@@ -51,7 +51,7 @@ export default function Profile({navigation}){
     return(
         <View style={styles.container}>
 
-            <Logout />
+            <Logout isLogin={isLogin} />
             <Subject />
 
             {/* content */}

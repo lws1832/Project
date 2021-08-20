@@ -2,6 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { StyleSheet, View, ScrollView, TextInput, Text, TouchableOpacity} from 'react-native';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import _ from 'lodash';
 
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
@@ -15,6 +16,7 @@ statnNm		지하철역명
 statnFid	이전지하철역ID
 statnId		다음지하철역ID
 subwayList	연계호선ID(당역포함)
+trainLineNm 도착지방면
 */
 
 export default function Search({navigation}){
@@ -28,9 +30,10 @@ export default function Search({navigation}){
     const [preeStn, setPreeStn] = useState(''); // 이전x2 역
     const [preStn, setPreStn] = useState('');   // 이전 역
     const [nextStn, setNextStn] = useState(''); // 다음 역
-
-
-    const [bookmark, setBookmark] = useState(null);
+    const [arvTime,setArvTime] = useState('') //도착 예정 시간
+    const [bookmark, setBookmark] = useState(null); 
+    const [trnlineNm, setTrnlineNm] = useState('') //행-방면
+    
 
     useEffect(() => {
         const getSubway = async () => {
@@ -60,42 +63,90 @@ export default function Search({navigation}){
         return name == word && wordLength != 0;
     }
 
-    const postData = () => {
-        console.log('Data extracting..');
+    // 
+    let uniqData;
+    const ChangeText = value => {
+        const data = subway.filter( item => { 
+            return matchName(item.statnNm, value) == true;
+        })
+        uniqData = _.uniqBy(data, "trainLineNm")
+    }
 
-        subway.filter(item => {
-            return matchName(item.statnNm, searchText) == true;
-        })
-        .map(item => {
-            return (
-                setLine(item.subwayList),
-                setStnName(item.statnNm),
-                subway
-                .filter(v => {
-                    return item.statnTid == v.statnId
-                })
-                .map(v => {
-                    return console.log('콘솔확인용11',v),setNextStn(v.statnNm);
-                }),
-                subway
-                .filter(v => {
-                    return item.statnFid == v.statnId
-                })
-                .map(v => {
-                    return (
-                        setPreStn(v.statnNm),
-                        subway
-                        .filter(e => {
-                            return v.statnFid == e.statnId
-                        })
-                        .map(e => {
-                            return setPreeStn(e.statnNm);
-                        })
-                    )
-                })
-            )
-        })
-        console.log('ppp : ',stnName, preeStn, preStn, nextStn);
+    const postData = data => {
+        console.log('Data extracting..');
+        console.log(data);
+
+        //line, stnName, preeStn, preStn, nextStn, arvTime, trnlineNm
+        setLine(data.subwayList)
+
+        
+        // setPreeStn(data.statnNm) // 이전 이전역
+        // // setPreStn(data.statnNm) // 이전 역
+       
+        // setNextStn(data.statnNm) // 다음역
+
+        //console.log(data.statnId)  현재역 아이디값
+//      <statnFid>1005000548</statnFid> 이전
+//      <statnTid>1005000546</statnTid> 다음
+        const curr = subway.filter(item => (item.subwayId === data.subwayId && item.updnLine === data.updnLine && item.trainLineNm.split(' - ')[0] === data.trainLineNm.split(' - ')[0]))
+        // console.log(curr)
+        const statnFid = curr.filter(item => item.statnId === data.statnFid)
+        const statnTid = curr.filter(item => item.statnId === data.statnTid)
+        const preesFid = subway.filter(item => (item.statnId === statnFid[0].statnFid))
+        
+        // console.log('이전역 : ' , statnFid)
+        // console.log('이전이전역 : ', preesFid)
+        //console.log('이게 뭔데?',statnFid) // 이전이전역 아이디
+
+        setStnName(data.statnNm) // 현재 
+        setPreStn(statnFid[0].statnNm)
+        setNextStn(statnTid[0].statnNm)
+        setPreeStn(preesFid[0].statnNm)
+        setArvTime(data.barvlDt)
+        setTrnlineNm(data.trainLineNm)
+
+        // subway.filter(item => {
+        //     return matchName(item.statnNm, searchText) == true;
+        // })
+        // .map((item,key) => {
+        //     key={key}
+        //     return (
+        //         setLine(item.subwayList),
+        //         setStnName(item.statnNm),
+        //         subway
+        //         .filter(v => {
+        //             return item.statnTid == v.statnId
+        //         })
+        //         .map((v,key) => {
+        //             key={key}
+        //             console.log('여기는 다오는데',v.trainLineNm)
+        //             return (
+        //                 setArvTime(v.barvlDt),setNextStn(v.statnNm)
+        //                 ,setTrnlineNm(v.trainLineNm),
+        //                 console.log('왜 한개만 오냐고',trnlineNm)
+        //             ) 
+        //         }),
+        //         subway
+        //         .filter(v => {
+        //             return item.statnFid == v.statnId
+        //         })
+        //         .map((v,key) => {
+        //             key={key}
+        //             return (
+        //                 setPreStn(v.statnNm),
+        //                 subway
+        //                 .filter(e => {
+        //                     return v.statnFid == e.statnId
+        //                 })
+        //                 .map((e,key) => {
+        //                     key={key}
+        //                     return setPreeStn(e.statnNm);
+        //                 })
+        //             )
+        //         })
+        //     )
+        // })
+        // console.log('ppp : ',stnName, preeStn, preStn, nextStn, arvTime,trnlineNm);
     }
 
     return (
@@ -116,6 +167,7 @@ export default function Search({navigation}){
                                     type="text"
                                     value={searchText}
                                     onChangeText={text => setSearctText(text)}
+                                    onChange={ChangeText(searchText)}
                                     style={styles.textBox}
                                 />
                                 <View style={styles.button}>
@@ -130,106 +182,98 @@ export default function Search({navigation}){
                                             {/* 검색 결과 카테고리 */}
                                             <View style={styles.resultCategory}>
                                                 <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>호선</Text>
-                                                <Text style={{...styles.ctgText, flex:2.5}}>역 이름</Text>
-                                                <Text style={{...styles.ctgText, flex:1.5}}>역 방향</Text>
+                                                <Text style={{...styles.ctgText, flex:2}}>역 이름</Text>
+                                                <Text style={{...styles.ctgText, flex:2}}>역 방향</Text>
                                                 <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>북마크</Text>
                                             </View>
                                             
                                             {/* 검색 결과 내용 */}
                                             <View style={styles.resultList}>
                                                 {
-                                                    subway.filter(item => {
+                                            subway.filter(item => {
                                                         return matchName(item.statnNm, searchText) == true;
                                                     })
                                                     .map((item, k) => {
                                                         return (
-                                                            <View
-                                                                key={k}
-                                                                style={styles.result}
-                                                            >
-                                                                {/* 호선 */}
-                                                                <View style={{...styles.listText, flex:1, flexDirection:"row", alignItems:"center"}}>
-                                                                    <MaterialCommunityIcons
-                                                                        name={`numeric-${item.subwayList[3]}-circle`}
-                                                                        size={16}
-                                                                        color="purple"
-                                                                    />
-                                                                    {
-                                                                        item.subwayList[8] != null
-                                                                        ? (
-                                                                            <MaterialCommunityIcons
-                                                                                name={`numeric-${item.subwayList[8]}-circle`}
-                                                                                size={16}
-                                                                                color="purple"
-                                                                            />
-                                                                        )
-                                                                        : null
-                                                                    }
-                                                                </View>
-                                                                
-                                                                {/* 역 이름 */}
-                                                                {/* {
-                                                                    subway
-                                                                    .filter(v => {
-                                                                        return v.statnNm == item.ordkey != v.ordkey;
-                                                                    })
-                                                                    .map((v, k) => {
-                                                                        console.log('check : ',v.statnNm)
-                                                                        return <Text key={k} style={{...styles.listText, flex:2}}>
-                                                                            {v.statnNm}
-                                                                        </Text>
-                                                                    })
-                                                                } */}
-
-                                                                {
-                                                                    // console.log('전체 : ', item.statnFid)
-                                                                    // console.log('11 : ',
-                                                                    //     item
-                                                                    // )
-                                                                }
-
-                                                                <TouchableOpacity
-                                                                    style={{flex:2.5}}
-                                                                    onPressIn={() => { postData () }}
-                                                                    onPressOut={() => {navigation.navigate('실시간 역 정보', {
-                                                                        line, stnName, preeStn, preStn, nextStn,
-                                                                    })}}
+                                                            k >= uniqData.length
+                                                            ? null
+                                                            : (
+                                                                <View
+                                                                    key={k}
+                                                                    style={styles.result}
                                                                 >
-                                                                    <Text style={styles.listText}>{item.statnNm}</Text>
-                                                                </TouchableOpacity>
-
-                                                                {/* 역 방향 */}
-                                                                <Text style={{...styles.listText, flex:1.5}}>{item.bstatnNm}행</Text>
-
-                                                                {/* 다음 역 */}
-                                                                {/* {
-                                                                    subway
-                                                                    .filter(v => {
-                                                                        return item.statnTid == v.statnId
-                                                                    })
-                                                                    .map((v, k) => {
-                                                                        if (k == 1){
-                                                                            return <Text key={k} style={{...styles.listText, flex:2}}>{v.statnNm}</Text>
+                                                                    {/* 호선 */}
+                                                                    <View style={{ ...styles.listText, flex: 1, flexDirection: "row", alignItems: "center" }}>
+                                                                        <MaterialCommunityIcons
+                                                                            name={`numeric-${item.subwayList[3]}-circle`}
+                                                                            size={16}
+                                                                            color="purple"
+                                                                        />
+                                                                            {
+                                                                                item.subwayList[8] != null
+                                                                                ? (
+                                                                                    <MaterialCommunityIcons
+                                                                                        name={`numeric-${item.subwayList[8]}-circle`}
+                                                                                        size={16}
+                                                                                        color="purple"
+                                                                                    />
+                                                                                )
+                                                                                : null
+                                                                            }
+                                                                    </View>
+                                                                    <TouchableOpacity
+                                                                        style={{ flex: 2 }}
+                                                                        onPressIn={() => { postData(uniqData[k]) }}
+                                                                        onPressOut={() => {
+                                                                            
+                                                                            navigation.navigate('실시간 역 정보', {
+                                                                                line, stnName, preeStn, preStn, nextStn,
+                                                                                 arvTime, trnlineNm,
+                                                                            })
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            k >= uniqData.length
+                                                                            ? null
+                                                                            : (
+                                                                                <Text style={styles.listText}>
+                                                                                    {uniqData[k].statnNm}
+                                                                                </Text>
+                                                                            )
                                                                         }
-                                                                    })
-                                                                } */}
+                                                                    </TouchableOpacity>
 
-                                                                {/* 북마크 */}
-                                                                <TouchableOpacity style={{...styles.listText, flex:1, alignItems:"center"}}>
-                                                                    <AntDesign
-                                                                        name="star"
-                                                                        size={20}
-                                                                        color={
-                                                                            bookmark == null /* 디비 연결 후 !=로 수정 */
+                                                                    {/* 역 방향 */}
+                                                                    <Text style={{ ...styles.listText, flex: 2 }}>
+                                                                            {
+                                                                                k >= uniqData.length
+                                                                                ? null
+                                                                                : (
+                                                                                    <Text>
+                                                                                        {uniqData[k].trainLineNm}
+                                                                                    </Text>
+                                                                                )
+                                                                            }
+                                                                    </Text>
+
+                                                                    {/* 북마크 */}
+                                                                    <TouchableOpacity style={{ ...styles.listText, flex: 1, alignItems: "center" }}>
+                                                                        <AntDesign
+                                                                            name="star"
+                                                                            size={20}
+                                                                            color={
+                                                                                bookmark == null /* 디비 연결 후 !=로 수정 */
                                                                                 ? "rgb(255, 204, 0)"
                                                                                 : "lightgray"
-                                                                        }
-                                                                    />
-                                                                </TouchableOpacity>
-                                                            </View>
+                                                                            }
+                                                                        />
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            )
                                                         )
                                                     })
                                                 }
+                                                
                                             </View>
                                         </View>
                                     </ScrollView>

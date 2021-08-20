@@ -8,7 +8,7 @@ import ProfileScreen from '../navigator/NaviProf';
 
 const Tab = createBottomTabNavigator();
 
-const NaviMenu = () => {
+const NaviMenu = ({isLogin}) => {
     return(
         <Tab.Navigator
             screenOptions={ ({route}) => ({
@@ -43,7 +43,7 @@ const NaviMenu = () => {
         >
             <Tab.Screen name="menuSearch" component={SearchScreen} />
             <Tab.Screen name="menuBookmark" component={BookmarkScreen} />
-            <Tab.Screen name="menuProfile" component={ProfileScreen} />
+            <Tab.Screen name="menuProfile" component={ProfileScreen} isLogin={isLogin} />
         </Tab.Navigator>
     );
 }

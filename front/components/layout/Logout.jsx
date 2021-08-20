@@ -2,12 +2,31 @@ import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
 import { AntDesign} from '@expo/vector-icons';
 
-export default function Logout(){
-    const [isLogin,setIsLogin] = useState(false);
-
-    const alertTest = () => {
-        console.log('클릭함');
-        Alert.alert("클릭함");
+export default function Logout({isLogin}){
+    const logout = async (title, content) => {
+        try {
+            console.log(isLogin);
+            console.log('111까지 옴');
+            let url = `http://192.168.0.14:3000/user/delete`;
+            let data = {
+                id: 1,
+            }
+            try {
+                console.log('222까지 옴');
+                await fetch(url, {
+                    method: 'DELETE',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log('로그아웃 완료');
+            } catch (e) {
+                console.log(e);
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return(
@@ -16,7 +35,7 @@ export default function Logout(){
                 <View style={styles.iconBookmark}>
                     <TouchableOpacity
                         style={styles.iconTouch}
-                        onPress={() => { alertTest() }}
+                        onPress={() => { logout() }}
                     >
                         {
                             isLogin
