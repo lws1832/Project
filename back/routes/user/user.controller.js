@@ -29,7 +29,7 @@ let create = async (req, res) => {
     try {
         let result = await User.create({
             accessToken: accessToken,
-            idx: id,
+            id: id,
             nickname: name,
             user_email: email,
         })
