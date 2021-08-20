@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState,useContext,useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons'; 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CredentialsContext } from '../CredentialsContext';
 import Space from '../layout/Space';
 import Subject from '../layout/Subject';
 import Logout from '../layout/Logout';
 
 export default function Profile({navigation}){
+    const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+    const [storageName,setUStorageName]= useState("")
+
+    const clear = async ()=>{
+      try{
+      let value = await AsyncStorage.getItem('@User:Token');
+      let data = JSON.parse(value);
+      const nickName = data.name;
+      console.log('프로필에서?',nickName)
+      setUStorageName(nickName)
+      }catch(error){
+        console.log(error);
+      }
+    }
+  
+    useEffect(()=>{
+      clear()
+    },[])
+
     const list = [
         {
             id: 1,
@@ -57,7 +77,7 @@ export default function Profile({navigation}){
             {/* content */}
             <View style={styles.content}>
                 <View style={{flex:1}}>
-                    <Text style={styles.userName}>이우성님</Text>
+                <Text>{storageName != "" ? storageName : ""}</Text>
                 </View>
                 <View style={{flex:5, marginVertical:50}}>
                     <FlatList
