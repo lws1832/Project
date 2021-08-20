@@ -150,19 +150,6 @@ export default function SubwayInfo({ route }){
                         </View>
                     </View>
                 </View>
-                <View style={{flex:5, backgroundColor:"#eee"}}>
-                    <View style={{flex:1, marginHorizontal:20, paddingVertical:15}}>
-                        <Text style={styles.toGo}>마곡행</Text>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>이번 열차</Text>
-                            <Text style={styles.arriveTime}>1분 48초</Text>
-                        </View>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>다음 열차</Text>
-                            <Text style={styles.arriveTime}>4분 7초</Text>
-                        </View>
-                    </View>
-                </View>
             </View>
             
             <Space />
