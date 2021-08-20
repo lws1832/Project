@@ -1,11 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
-
+import axios from 'axios';
 import Space from '../layout/Space';
+
+const API_KEY = "4e4e56716d637370313031745148516a";
 
 export default function SubwayInfo({ route }){
     const [lineArr, setLineArr] = useState([]); // 호선
+    const [arrTime,setArrTime] = useState(null) //도착 시간 
 
     useEffect(() => {
         console.log('before split : ', route);
@@ -81,32 +84,21 @@ export default function SubwayInfo({ route }){
                 </View>
                 <View style={{flex:5, backgroundColor:"#eee"}}>
                     <View style={{flex:1, marginHorizontal:20, paddingVertical:15, borderBottomWidth:1, borderBottomColor:"#777"}}>
-                        <Text style={styles.toGo}>방화행</Text>
+                        <Text style={styles.toGo}>
+                            {/* {console.log('방면====',route.params.trnlineNm)} */}
+                            {route.params.trnlineNm}
+                        </Text>
                         <View style={styles.carBox}>
                             <Text style={styles.car}>이번 열차</Text>
                             <Text style={styles.arriveTime}>곧 도착</Text>
                         </View>
                         <View style={styles.carBox}>
                             <Text style={styles.car}>다음 열차</Text>
-                            <Text style={styles.arriveTime}>3분 30초</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{flex:5, backgroundColor:"#eee"}}>
-                    <View style={{flex:1, marginHorizontal:20, paddingVertical:15}}>
-                        <Text style={styles.toGo}>마곡행</Text>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>이번 열차</Text>
-                            <Text style={styles.arriveTime}>1분 48초</Text>
-                        </View>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>다음 열차</Text>
-                            <Text style={styles.arriveTime}>4분 7초</Text>
+                            <Text style={styles.arriveTime}></Text>
                         </View>
                     </View>
                 </View>
             </View>
-            
             <Space />
         </View>
     );

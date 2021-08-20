@@ -30,9 +30,10 @@ export default function Search({navigation}){
     const [preeStn, setPreeStn] = useState(''); // 이전x2 역
     const [preStn, setPreStn] = useState('');   // 이전 역
     const [nextStn, setNextStn] = useState(''); // 다음 역
-
-
-    const [bookmark, setBookmark] = useState(null);
+    const [arvTime,setArvTime] = useState('') //도착 예정 시간
+    const [bookmark, setBookmark] = useState(null); 
+    const [trnlineNm, setTrnlineNm] = useState('') //행-방면
+    
 
     useEffect(() => {
         const getSubway = async () => {
@@ -71,44 +72,81 @@ export default function Search({navigation}){
         uniqData = _.uniqBy(data, "trainLineNm")
     }
 
-    const postData = () => {
+    const postData = data => {
         console.log('Data extracting..');
+        console.log(data);
 
-        subway.filter(item => {
-            return matchName(item.statnNm, searchText) == true;
-        })
-        .map(item => {
-            return (
-                console.log('444',item.subwayList),
-                console.log('555',item.statnNm),
-                setLine(item.subwayList),
-                setStnName(item.statnNm),
-                subway
-                .filter(v => {
-                    return item.statnTid == v.statnId
-                })
-                .map(v => {
-                    return setNextStn(v.statnNm);
-                }),
-                subway
-                .filter(v => {
-                    return item.statnFid == v.statnId
-                })
-                .map(v => {
-                    return (
-                        setPreStn(v.statnNm),
-                        subway
-                        .filter(e => {
-                            return v.statnFid == e.statnId
-                        })
-                        .map(e => {
-                            return setPreeStn(e.statnNm);
-                        })
-                    )
-                })
-            )
-        })
-        console.log('ppp : ',stnName, preeStn, preStn, nextStn);
+        //line, stnName, preeStn, preStn, nextStn, arvTime, trnlineNm
+        setLine(data.subwayList)
+
+        
+        // setPreeStn(data.statnNm) // 이전 이전역
+        // // setPreStn(data.statnNm) // 이전 역
+       
+        // setNextStn(data.statnNm) // 다음역
+
+        //console.log(data.statnId)  현재역 아이디값
+//      <statnFid>1005000548</statnFid> 이전
+//      <statnTid>1005000546</statnTid> 다음
+        const curr = subway.filter(item => (item.subwayId === data.subwayId && item.updnLine === data.updnLine && item.trainLineNm.split(' - ')[0] === data.trainLineNm.split(' - ')[0]))
+        // console.log(curr)
+        const statnFid = curr.filter(item => item.statnId === data.statnFid)
+        const statnTid = curr.filter(item => item.statnId === data.statnTid)
+        const preesFid = subway.filter(item => (item.statnId === statnFid[0].statnFid))
+        
+        // console.log('이전역 : ' , statnFid)
+        // console.log('이전이전역 : ', preesFid)
+        //console.log('이게 뭔데?',statnFid) // 이전이전역 아이디
+
+        setStnName(data.statnNm) // 현재 
+        setPreStn(statnFid[0].statnNm)
+        setNextStn(statnTid[0].statnNm)
+        setPreeStn(preesFid[0].statnNm)
+        setArvTime(data.barvlDt)
+        setTrnlineNm(data.trainLineNm)
+
+        // subway.filter(item => {
+        //     return matchName(item.statnNm, searchText) == true;
+        // })
+        // .map((item,key) => {
+        //     key={key}
+        //     return (
+        //         setLine(item.subwayList),
+        //         setStnName(item.statnNm),
+        //         subway
+        //         .filter(v => {
+        //             return item.statnTid == v.statnId
+        //         })
+        //         .map((v,key) => {
+        //             key={key}
+        //             console.log('여기는 다오는데',v.trainLineNm)
+        //             return (
+        //                 setArvTime(v.barvlDt),setNextStn(v.statnNm)
+        //                 ,setTrnlineNm(v.trainLineNm),
+        //                 console.log('왜 한개만 오냐고',trnlineNm)
+        //             ) 
+        //         }),
+        //         subway
+        //         .filter(v => {
+        //             return item.statnFid == v.statnId
+        //         })
+        //         .map((v,key) => {
+        //             key={key}
+        //             return (
+        //                 setPreStn(v.statnNm),
+        //                 subway
+        //                 .filter(e => {
+        //                     return v.statnFid == e.statnId
+        //                 })
+        //                 .map((e,key) => {
+        //                     key={key}
+        //                     return setPreeStn(e.statnNm);
+        //                 })
+        //             )
+        //         })
+        //     )
+        // })
+        // console.log('ppp : ',stnName, preeStn, preStn, nextStn, arvTime,trnlineNm);
     }
 
     return (
@@ -152,7 +190,7 @@ export default function Search({navigation}){
                                             {/* 검색 결과 내용 */}
                                             <View style={styles.resultList}>
                                                 {
-                                                    subway.filter(item => {
+                                            subway.filter(item => {
                                                         return matchName(item.statnNm, searchText) == true;
                                                     })
                                                     .map((item, k) => {
@@ -183,13 +221,14 @@ export default function Search({navigation}){
                                                                                 : null
                                                                             }
                                                                     </View>
-
                                                                     <TouchableOpacity
                                                                         style={{ flex: 2 }}
-                                                                        onPressIn={() => { postData() }}
+                                                                        onPressIn={() => { postData(uniqData[k]) }}
                                                                         onPressOut={() => {
+                                                                            
                                                                             navigation.navigate('실시간 역 정보', {
                                                                                 line, stnName, preeStn, preStn, nextStn,
+                                                                                 arvTime, trnlineNm,
                                                                             })
                                                                         }}
                                                                     >
@@ -234,6 +273,7 @@ export default function Search({navigation}){
                                                         )
                                                     })
                                                 }
+                                                
                                             </View>
                                         </View>
                                     </ScrollView>
