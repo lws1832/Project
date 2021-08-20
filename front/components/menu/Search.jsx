@@ -5,7 +5,6 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import Space from '../layout/Space';
-import Subject from '../layout/Subject';
 
 const API_KEY = "4e4e56716d637370313031745148516a";
 
@@ -136,10 +135,58 @@ export default function Search({navigation}){
         // console.log('ppp : ',stnName, preeStn, preStn, nextStn);
     }
 
+    // const [title, setTitle] = useState('');
+    // const [content, setContent] = useState('');
+    
+    // const [agree, setAgree] = useState(false);
+    // const [modalVisible, setModalVisible] = useState(false);
+
+    // const inqSubmit = async (title, content) => {
+    //     if (title == ''){
+    //         Alert.alert('문의 제목을 입력해주세요.');
+    //     } else if (content == ''){
+    //         Alert.alert('문의 내용을 입력해주세요.');
+    //     } else if (agree == false){
+    //         Alert.alert('개입 정보 수집 및 이용에 동의해주세요.');
+    //     } else{
+    //         try{
+    //             console.log('111까지 옴');
+    //             let url = `http://192.168.0.14:3000/inquire/create`;
+    //             let data = {
+    //                 title:title,
+    //                 content:content,
+    //                 // file:file,
+    //             }
+    //             try{
+    //                 console.log('222까지 옴');
+    //                 await fetch (url,{
+    //                     method:'POST',
+    //                     body:JSON.stringify(data),
+    //                     headers:{
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                 });
+    //                 console.log('333까지 옴');
+    //                 setTitle('');
+    //                 setContent('');
+    //                 Alert.alert('문의가 접수되었습니다.');
+    //             } catch (e){
+    //                 console.log(e);
+    //             }
+    //         } catch (e){
+    //             console.log(e);
+    //         }
+    //     }
+    // }
+
     return (
         <View style={styles.container}>
             <Space />
-            <Subject />
+            
+            {/* 페이지 명 */}
+            <View style={styles.subject}>
+                <Text style={styles.title}>역 검색</Text>
+            </View>
 
             {/* content */}
             <View style={styles.content}>
@@ -348,6 +395,18 @@ const styles = StyleSheet.create({
     },
 
     /* content */
+    subject:{
+        flex:1,
+        justifyContent:"flex-start",
+        alignItems:"flex-start",
+    },
+    title:{
+        marginLeft:25,
+        marginVertical:10,
+        fontSize:40,
+        fontWeight:"bold",
+        color:"rgb(41, 128, 185)",
+    },
     searchBox:{
         flexDirection:"row",
         marginHorizontal:20,
