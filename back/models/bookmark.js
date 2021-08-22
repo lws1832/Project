@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = class Bookmark extends Sequelize.Model{
     static init(sequelize){
         return super.init({
-            nickname:{  // user.js와 join 시 필요한 정보
+            idx:{       // user.js와 join 시 필요한 정보
                 type:Sequelize.STRING(100),
                 allowNull:false,
                 unique:true,

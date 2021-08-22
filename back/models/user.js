@@ -1,20 +1,18 @@
 const Sequelize = require('sequelize');
 
-// 카카오 연동 로그인 기준
 module.exports = class User extends Sequelize.Model{
     static init(sequelize){
         return super.init({
-            id:{    // 고유 ID값(필수)
+            idx:{   // 고유 ID값(필수)
                 type:Sequelize.STRING(100),
                 allowNull:false,
                 unique:true,
-                primaryKey: true,
             },      // 닉네임(필수)
             nickname:{
                 type:Sequelize.STRING(100),
                 allowNull:false,
                 unique:true,
-            },      // 이메일(선택)
+            },      // 이메일(필수)
             user_email:{
                 type:Sequelize.STRING(50),
                 allowNull:true,
@@ -27,6 +25,11 @@ module.exports = class User extends Sequelize.Model{
                 type:Sequelize.DATE,
                 allowNull:false,
                 defaultValue:Sequelize.NOW,
+            },      // 토큰값
+            accessToken:{
+                type:Sequelize.STRING(300),
+                allowNull:false,
+                unique:true,
             },
         }, {
             sequelize,

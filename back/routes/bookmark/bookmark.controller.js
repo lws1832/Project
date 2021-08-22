@@ -1,9 +1,27 @@
-const express = require('express');
-const router = express.Router();
+const { sequelize, Bookmark } = require('../../models');
 
-router.get('/', function (req, res, next){
-    console.log('bookmark index 접근');
-    res.render('index', { title: 'hi bookmark' });
-});
+const create = async (req,res) => {
+    console.log('/inquire/create 접근');
 
-module.exports = router;
+    let {line, station, direction} = req.body;
+    console.log('req.body : ', line, station, direction);
+
+    let data = await Bookmark.create({
+        line:line,
+        station:station,
+        direction:direction,
+    })
+    .then(result => {
+        res.json({
+            result,
+        });
+    	console.log("bookmark create success");
+    })
+    .catch(err => {
+    	console.log("bookmark create fail");
+    })
+}
+
+module.exports = {
+    create,
+}

@@ -5,7 +5,8 @@ import { FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icon
 import Space from '../layout/Space';
 
 export default function SubwayInfo({ route }){
-    const [lineArr, setLineArr] = useState([]); // 호선
+    const [lineArr, setLineArr] = useState([]);     // 호선
+    const [arrTime, setArrTime] = useState(null);   // 도착시간 
 
     useEffect(() => {
         const str = route.params.line;  // 받아온 호선들을 배열에 한 번 담고,
@@ -20,8 +21,7 @@ export default function SubwayInfo({ route }){
             {/* content1 */}
             <View style={styles.content1}>
 
-                {/* 호선, 역 이름 */}
-                {/* 63 경의중앙선, 65 공항철도, 67 경춘선, 75 수인분당선, 77 신분당선 */}
+                {/* 호선, 역 이름 - 63 경의중앙선 / 65 공항철도 / 67 경춘선 / 75 수인분당선 / 77 신분당선 */}
                 <View style={{ flexDirection: "row", marginHorizontal:20, alignItems:"center"}}>
                     {
                         lineArr.map((v, k) => {

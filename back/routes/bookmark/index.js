@@ -4,6 +4,6 @@ const router = express.Router();
 // Controller
 const bookmarkController = require('./bookmark.controller');
 
-router.get('/', bookmarkController);
+router.post('/post', bookmarkController.create);
 
 module.exports = router;

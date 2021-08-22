@@ -15,8 +15,8 @@ const NaviLogin = () => {
                     "headerShown":false,
                 })}
             >
-                <Stack.Screen name="Googlelogin" component={GoogleLogin} />
-                <Stack.Screen name="NaviMeun" component={NaviMenu} />
+                <Stack.Screen name="GoogleLogin" component={GoogleLogin} />
+                <Stack.Screen name="NaviMenu" component={NaviMenu} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -8,7 +8,7 @@ import ProfileScreen from '../navigator/NaviProf';
 
 const Tab = createBottomTabNavigator();
 
-const NaviMenu = ({isLogin}) => {
+const NaviMenu = () => {
     return(
         <Tab.Navigator
             screenOptions={ ({route}) => ({
@@ -16,7 +16,7 @@ const NaviMenu = ({isLogin}) => {
                 "tabBarActiveTintColor": "#1B2228",   // 활성화 색
                 "tabBarInactiveTintColor": "#C7CDD3", // 비활성화 색
                 "tabBarShowLabel": false,               // 텍스트 감추기
-                tabBarIcon: ({focused, color, size}) => { 
+                tabBarIcon: ({focused, color, size}) => {
                     let iconName;
                     switch (route.name) {
                         case 'menuSearch':
@@ -43,7 +43,7 @@ const NaviMenu = ({isLogin}) => {
         >
             <Tab.Screen name="menuSearch" component={SearchScreen} />
             <Tab.Screen name="menuBookmark" component={BookmarkScreen} />
-            <Tab.Screen name="menuProfile" component={ProfileScreen} isLogin={isLogin} />
+            <Tab.Screen name="menuProfile" component={ProfileScreen} />
         </Tab.Navigator>
     );
 }

@@ -1,6 +1,6 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, TextInput, Text, TouchableOpacity} from 'react-native';
-import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
+import { EvilIcons, AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -22,6 +22,7 @@ export default function Search({navigation}){
     const [subway, setSubway] = useState(null);         // 모든역정보
     const [error, setError] = useState(null);           // 에러메시지
     const [searchText, setSearctText] = useState('');   // 검색결과
+    const [bookmark, setBookmark] = useState('');
 
     // onPressed 할 때 넘어가는 값
     const [line, setLine] = useState('');               // 연계호선명
@@ -31,10 +32,6 @@ export default function Search({navigation}){
     const [nextStn, setNextStn] = useState('');         // 다음역
     const [arvTime,setArvTime] = useState('')           // 도착예정시간
     const [trnlineNm, setTrnlineNm] = useState('')      // 행-방면
-
-    const [reLine, setReLine] = useState('');
-    const [bookmark, setBookmark] = useState(null); 
-
     
     useEffect(() => {
         const getSubway = async () => {
@@ -71,113 +68,55 @@ export default function Search({navigation}){
         const data = subway.filter( item => { 
             return matchName(item.statnNm, value) == true;
         })
-        lineData = _.uniqBy(data, "subwayList")
-        uniqData = _.uniqBy(data, "trainLineNm");
+        lineData = _.uniqBy(data, "subwayList");    // 호선 데이터
+        uniqData = _.uniqBy(data, "trainLineNm");   // 행-방면 데이터
     }
 
     const postData = data => {
         console.log('Data extracting..');
         console.log(data);
 
-        setLine(data.subwayList);
+        const curr = subway.filter(item => (item.subwayId === data.subwayId && item.updnLine === data.updnLine && item.trainLineNm.split(' - ')[0] === data.trainLineNm.split(' - ')[0]));
+        console.log('curr : ', curr);
+        const statnFid = curr.filter(item => item.statnId === data.statnFid);            // 이전역
+        const statnTid = curr.filter(item => item.statnId === data.statnTid);            // 다음역
+        const preesFid = subway.filter(item => (item.statnId === statnFid[0].statnFid)); // 이전x2역
 
-        console.log('현재역명 : ', data.statnNm)
-        console.log('현재역ID : ', data.statnId) // 현재역 아이디값
-        console.log('도착방면 : ?', data.trainLineNm)
-
-        const statnFid = subway.filter(item => item.statnId === data.statnFid);          // 이전역
-        const statnTid = subway.filter(item => item.statnId === data.statnTid);          // 다음역
-        const preesFid = subway.filter(item => (item.statnId === statnFid[0].statnFid)); // 이전전역
-
-        // console.log('checkout : ', preesFid, statnFid, statnTid);
-
+        setLine(data.subwayList);           // 호선
         setStnName(data.statnNm);           // 현재역
-        setPreeStn(preesFid[0].statnNm);    // 이전x2역
+        setPreeStn(preesFid[0].statnNm);    // 이전이전역
         setPreStn(statnFid[0].statnNm);     // 이전역
         setNextStn(statnTid[0].statnNm);    // 다음역
         setTrnlineNm(data.trainLineNm);     // 행-방면
         setArvTime(data.barvlDt);           // 도착시간
-
-        // subway.filter(item => {
-        //     return matchName(item.statnNm, searchText) == true;
-        // })
-        // .map(item => {
-        //     return (
-        //         console.log('444',e),
-        //         console.log('555',item.statnNm),
-        //         setLine(e),
-        //         setStnName(item.statnNm),
-        //         subway
-        //         .filter(v => {
-        //             return item.statnTid == v.statnId
-        //         })
-        //         .map(v => {
-        //             return setNextStn(v.statnNm);
-        //         }),
-        //         subway
-        //         .filter(v => {
-        //             return item.statnFid == v.statnId
-        //         })
-        //         .map(v => {
-        //             return (
-        //                 setPreStn(v.statnNm),
-        //                 subway
-        //                 .filter(e => {
-        //                     return v.statnFid == e.statnId
-        //                 })
-        //                 .map(e => {
-        //                     return setPreeStn(e.statnNm);
-        //                 })
-        //             )
-        //         })
-        //     )
-        // })
-        // console.log('ppp : ',stnName, preeStn, preStn, nextStn);
     }
 
-    // const [title, setTitle] = useState('');
-    // const [content, setContent] = useState('');
-    
-    // const [agree, setAgree] = useState(false);
-    // const [modalVisible, setModalVisible] = useState(false);
-
-    // const inqSubmit = async (title, content) => {
-    //     if (title == ''){
-    //         Alert.alert('문의 제목을 입력해주세요.');
-    //     } else if (content == ''){
-    //         Alert.alert('문의 내용을 입력해주세요.');
-    //     } else if (agree == false){
-    //         Alert.alert('개입 정보 수집 및 이용에 동의해주세요.');
-    //     } else{
-    //         try{
-    //             console.log('111까지 옴');
-    //             let url = `http://192.168.0.14:3000/inquire/create`;
-    //             let data = {
-    //                 title:title,
-    //                 content:content,
-    //                 // file:file,
-    //             }
-    //             try{
-    //                 console.log('222까지 옴');
-    //                 await fetch (url,{
-    //                     method:'POST',
-    //                     body:JSON.stringify(data),
-    //                     headers:{
-    //                         'Content-Type': 'application/json',
-    //                     },
-    //                 });
-    //                 console.log('333까지 옴');
-    //                 setTitle('');
-    //                 setContent('');
-    //                 Alert.alert('문의가 접수되었습니다.');
-    //             } catch (e){
-    //                 console.log(e);
-    //             }
-    //         } catch (e){
-    //             console.log(e);
-    //         }
-    //     }
-    // }
+    const addBookmark = async (line, stnName, trnlineNm) => {
+        try{
+            console.log('addBookmark 접근중');
+            let url = `http://192.168.0.14:3000/bookmark/create`;
+            let data = {
+                line:line,
+                station:stnName,
+                direction:trnlineNm,
+            }
+            try{
+                console.log('addBookmark22');
+                await fetch (url,{
+                    method:'POST',
+                    body:JSON.stringify(data),
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log('addBookmark33');
+            } catch (e){
+                console.log(e);
+            }
+        } catch (e){
+            console.log(e);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -213,6 +152,7 @@ export default function Search({navigation}){
                                 ? (
                                     <ScrollView>
                                         <View style={styles.resultBox}>
+                                            
                                             {/* 검색 결과 카테고리 */}
                                             <View style={styles.resultCategory}>
                                                 <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>호선</Text>
@@ -317,7 +257,7 @@ export default function Search({navigation}){
                                                                         onPressIn={() => { postData(uniqData[k]) }}
                                                                         onPressOut={() => {
                                                                             navigation.navigate('실시간 역 정보', {
-                                                                                line, stnName, preeStn, preStn, nextStn, arvTime, trnlineNm
+                                                                                line, stnName, preeStn, preStn, nextStn, arvTime, trnlineNm,
                                                                             })
                                                                         }}
                                                                     >
@@ -346,7 +286,11 @@ export default function Search({navigation}){
                                                                     </Text>
 
                                                                     {/* 북마크 */}
-                                                                    <TouchableOpacity style={{ ...styles.listText, flex: 1, alignItems: "center" }}>
+                                                                    <TouchableOpacity
+                                                                        onPressIn={() => { postData(uniqData[k]) }}
+                                                                        onPressOut={() => addBookmark(line, stnName, trnlineNm)}
+                                                                        style={{ ...styles.listText, flex: 1, alignItems: "center" }}
+                                                                    >
                                                                         <AntDesign
                                                                             name="star"
                                                                             size={20}

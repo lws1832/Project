@@ -1,48 +1,39 @@
-import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
-import { AntDesign} from '@expo/vector-icons';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, TouchableOpacity, View, Alert,Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
 
-export default function Logout({isLogin}){
-    const logout = async (title, content) => {
-        try {
-            console.log(isLogin);
-            console.log('111까지 옴');
-            let url = `http://192.168.0.14:3000/user/delete`;
-            let data = {
-                id: 1,
-            }
-            try {
-                console.log('222까지 옴');
-                await fetch(url, {
-                    method: 'DELETE',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+import { CredentialsContext } from '../store/CredentialsContext';
+
+export default function Logout({}){
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+    const navigation = useNavigation();
+
+    const deleteToken = async () => {
+        await AsyncStorage
+        .removeItem('@User:Token')
+        .then(() => {
+            setStoredCredentials(''),
+            setTimeout(() => {
+                navigation.navigate('GoogleLogin');
                 console.log('로그아웃 완료');
-            } catch (e) {
-                console.log(e);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    return(
+            }, 1000);
+        })
+        .catch((e) => console.log(e));
+    };
+      
+    return (
         <>
             <View style={styles.header}>
                 <View style={styles.iconBookmark}>
                     <TouchableOpacity
+                        onPress={deleteToken}
                         style={styles.iconTouch}
-                        onPress={() => { logout() }}
                     >
-                        {
-                            isLogin
-                            ? <AntDesign name="logout" size={32} color="black" />
-                            : <AntDesign name="login" size={32} color="black" />
-                        }
+                        <AntDesign name="logout" size={32} color="black" />
                     </TouchableOpacity>
+                    {/* <Text onPress={clear}>ClearTest</Text> */}
                 </View>
             </View>
         </>
