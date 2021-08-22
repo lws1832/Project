@@ -6,7 +6,6 @@ module.exports = class Bookmark extends Sequelize.Model{
             idx:{       // user.js와 join 시 필요한 정보
                 type:Sequelize.STRING(100),
                 allowNull:false,
-                unique:true,
             },
             line:{      // 호선
                 type:Sequelize.STRING(50),
@@ -19,6 +18,7 @@ module.exports = class Bookmark extends Sequelize.Model{
             direction:{ // 방향
                 type:Sequelize.STRING(50),
                 allowNull:false,
+                unique:true,
             },
         },{
             sequelize,

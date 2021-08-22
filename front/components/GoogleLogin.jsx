@@ -38,17 +38,17 @@ const GoogleLogin = ({ navigation }) => {
             try{
               fetch(url, {
                 method: 'POST',
+                body: JSON.stringify(data),
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
               });
             } catch (e){ console.log(e, '1단계 에러'); }
           } catch (e){ console.log(e, '2단계 에러'); }
           let { accessToken } = result;
-          let { name } = user;
-          persistLogin({ accessToken, name });
+          let { id, name } = user;
+          persistLogin({ id, name, accessToken });
           setTimeout(() => {
             navigation.navigate('NaviMenu');
           }, 1000);
@@ -62,11 +62,10 @@ const GoogleLogin = ({ navigation }) => {
       });
   };
 
-  const persistLogin = async (accessToken,name,) => {
-    await AsyncStorage.setItem('@User:Token', JSON.stringify(accessToken,name))
+  const persistLogin = async (id, accessToken, name,) => {
+    await AsyncStorage.setItem('@User:Token', JSON.stringify(id, name, accessToken))
     .then(() => {
-      
-      setStoredCredentials(accessToken,name);
+      setStoredCredentials(id, name, accessToken);
     })
     .catch((error) => {
       console.log('Persisting login failed');

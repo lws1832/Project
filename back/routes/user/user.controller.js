@@ -17,7 +17,6 @@ let read = async (req, res) => {
     } catch (e) {
         console.error(e);
     }
-
 }
 
 let create = async (req, res) => {

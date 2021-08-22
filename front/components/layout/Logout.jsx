@@ -6,10 +6,11 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { CredentialsContext } from '../store/CredentialsContext';
 
-export default function Logout({}){
+export default function Logout(){
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
     const navigation = useNavigation();
 
+    // 사용자 토큰 삭제
     const deleteToken = async () => {
         await AsyncStorage
         .removeItem('@User:Token')

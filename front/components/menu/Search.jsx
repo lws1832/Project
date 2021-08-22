@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, TextInput, Text, TouchableOpacity} from 'react-native';
 import { EvilIcons, AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -19,20 +20,22 @@ trainLineNm 도착지방면
 */
 
 export default function Search({navigation}){
-    const [subway, setSubway] = useState(null);         // 모든역정보
+    const [subway, setSubway] = useState(null);         // 모든역정보(API)
     const [error, setError] = useState(null);           // 에러메시지
     const [searchText, setSearctText] = useState('');   // 검색결과
-    const [bookmark, setBookmark] = useState('');
 
-    // onPressed 할 때 넘어가는 값
     const [line, setLine] = useState('');               // 연계호선명
     const [stnName, setStnName] = useState('');         // 역명
     const [preeStn, setPreeStn] = useState('');         // 이전x2역
     const [preStn, setPreStn] = useState('');           // 이전역
     const [nextStn, setNextStn] = useState('');         // 다음역
-    const [arvTime,setArvTime] = useState('')           // 도착예정시간
-    const [trnlineNm, setTrnlineNm] = useState('')      // 행-방면
+    const [arvTime,setArvTime] = useState('');          // 도착예정시간
+    const [trnlineNm, setTrnlineNm] = useState('');     // 행-방면
     
+    // 작업중
+    const [storageIdx, setStorageIdx] = useState('');
+    const [bookmark, setBookmark] = useState(null);
+
     useEffect(() => {
         const getSubway = async () => {
             try {
@@ -52,8 +55,7 @@ export default function Search({navigation}){
     }, []);
 
     // 역 명과 검색 내용을 매칭
-    // name == 역 명, word == 검색 내용
-    const matchName = (name, word) => {
+    const matchName = (name, word) => {         // name == 역 명, word == 검색 내용
         let wordLength = word.length;           // 검색 내용 길이
         name = name.substring(0, wordLength);   // 역 명 문자열을 가장 앞부터 검색 내용의 길이까지만큼 리턴
 
@@ -65,43 +67,71 @@ export default function Search({navigation}){
     let lineData;
     let uniqData;
     const ChangeText = value => {
-        const data = subway.filter( item => { 
+        const data = subway.filter(item => { 
             return matchName(item.statnNm, value) == true;
         })
         lineData = _.uniqBy(data, "subwayList");    // 호선 데이터
         uniqData = _.uniqBy(data, "trainLineNm");   // 행-방면 데이터
     }
 
+    // 실시간 역 정보 페이지로 전달 할 데이터 추출
     const postData = data => {
         console.log('Data extracting..');
-        console.log(data);
 
         const curr = subway.filter(item => (item.subwayId === data.subwayId && item.updnLine === data.updnLine && item.trainLineNm.split(' - ')[0] === data.trainLineNm.split(' - ')[0]));
-        console.log('curr : ', curr);
         const statnFid = curr.filter(item => item.statnId === data.statnFid);            // 이전역
         const statnTid = curr.filter(item => item.statnId === data.statnTid);            // 다음역
         const preesFid = subway.filter(item => (item.statnId === statnFid[0].statnFid)); // 이전x2역
 
         setLine(data.subwayList);           // 호선
         setStnName(data.statnNm);           // 현재역
-        setPreeStn(preesFid[0].statnNm);    // 이전이전역
+        setPreeStn(preesFid[0].statnNm);    // 이전x2역
         setPreStn(statnFid[0].statnNm);     // 이전역
         setNextStn(statnTid[0].statnNm);    // 다음역
         setTrnlineNm(data.trainLineNm);     // 행-방면
         setArvTime(data.barvlDt);           // 도착시간
     }
 
-    const addBookmark = async (line, stnName, trnlineNm) => {
+    // 로그인 중인 계정의 idx 가져오기
+    const getIdx = async () => {
+        try {
+            let value = await AsyncStorage.getItem('@User:Token');
+            let data = JSON.parse(value);
+            const idx = data.id;
+            setStorageIdx(idx);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    // DB Bookmark GET
+    let bookmarkData;
+    const getBookmark = async () => {
+        let getData = await axios.get(`http://192.168.0.6:3000/bookmark/read`);
+        bookmarkData = getData.data.result.filter(item => { 
+            return item.idx == storageIdx;
+        })
+        setBookmark(bookmarkData);
+        console.log('aaa : ', bookmark);
+    }
+
+    const matchBM = (name, word) => {
+        return name == word;
+    }
+
+    // DB Bookmark POST
+    const postBookmark = async (line, stnName, trnlineNm) => {
         try{
-            console.log('addBookmark 접근중');
-            let url = `http://192.168.0.14:3000/bookmark/create`;
+            console.log('postBookmark 접근중');
+            let url = `http://192.168.0.6:3000/bookmark/create`;
             let data = {
+                idx:storageIdx,
                 line:line,
                 station:stnName,
                 direction:trnlineNm,
             }
             try{
-                console.log('addBookmark22');
+                console.log('postBookmark22');
                 await fetch (url,{
                     method:'POST',
                     body:JSON.stringify(data),
@@ -109,7 +139,7 @@ export default function Search({navigation}){
                         'Content-Type': 'application/json',
                     },
                 });
-                console.log('addBookmark33');
+                console.log('postBookmark33');
             } catch (e){
                 console.log(e);
             }
@@ -117,6 +147,11 @@ export default function Search({navigation}){
             console.log(e);
         }
     }
+
+    useEffect(() => {
+        getIdx();
+        getBookmark();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -288,7 +323,7 @@ export default function Search({navigation}){
                                                                     {/* 북마크 */}
                                                                     <TouchableOpacity
                                                                         onPressIn={() => { postData(uniqData[k]) }}
-                                                                        onPressOut={() => addBookmark(line, stnName, trnlineNm)}
+                                                                        onPressOut={() => postBookmark(line, stnName, trnlineNm)}
                                                                         style={{ ...styles.listText, flex: 1, alignItems: "center" }}
                                                                     >
                                                                         <AntDesign

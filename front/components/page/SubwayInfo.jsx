@@ -134,12 +134,12 @@ export default function SubwayInfo({ route }){
 
             {/* content2 */}
             <View style={styles.content2}>
-                <View style={{flex:1, marginLeft:185, justifyContent:"center"}}>
-                    <Octicons name="triangle-up" size={60} color="#eee" />
+                <View style={{flex:0.5, marginLeft:190, justifyContent:"center"}}>
+                    <Octicons name="triangle-up" size={48} color="#eee" />
                 </View>
                 <View style={{flex:5, backgroundColor:"#eee"}}>
-                    <View style={{flex:1, marginHorizontal:20, paddingVertical:15, borderBottomWidth:1, borderBottomColor:"#777"}}>
-                        <Text style={styles.toGo}>방화행</Text>
+                    <View style={{flex:1, marginHorizontal:20, paddingVertical:15}}>
+                        <Text style={styles.toGo}>{route.params.trnlineNm}</Text>
                         <View style={styles.carBox}>
                             <Text style={styles.car}>이번 열차</Text>
                             <Text style={styles.arriveTime}>곧 도착</Text>
@@ -147,19 +147,6 @@ export default function SubwayInfo({ route }){
                         <View style={styles.carBox}>
                             <Text style={styles.car}>다음 열차</Text>
                             <Text style={styles.arriveTime}>3분 30초</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{flex:5, backgroundColor:"#eee"}}>
-                    <View style={{flex:1, marginHorizontal:20, paddingVertical:15}}>
-                        <Text style={styles.toGo}>마곡행</Text>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>이번 열차</Text>
-                            <Text style={styles.arriveTime}>1분 48초</Text>
-                        </View>
-                        <View style={styles.carBox}>
-                            <Text style={styles.car}>다음 열차</Text>
-                            <Text style={styles.arriveTime}>4분 7초</Text>
                         </View>
                     </View>
                 </View>
@@ -180,9 +167,9 @@ const styles = StyleSheet.create({
         flex:3,
     },
     content2:{
-        flex:4,
+        flex:3,
         marginHorizontal:20,
-        marginBottom:10,
+        marginVertical:10,
     },
 
     /* content1 */
@@ -196,6 +183,7 @@ const styles = StyleSheet.create({
     },
     subtitle:{
         marginHorizontal:20,
+        marginBottom:10,
         fontSize:40,
         fontWeight:"bold",
         color:"#000",
@@ -207,7 +195,7 @@ const styles = StyleSheet.create({
         marginBottom:10,
     },
     line:{
-        flex:2,
+        flex:1.5,
         flexDirection:"row",
         marginHorizontal:20,
         alignItems:"center",
