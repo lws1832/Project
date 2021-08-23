@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import _ from 'lodash';
 
+import IPv4 from '../../ipconfig';
 import Space from '../layout/Space';
 
 const API_KEY = "4e4e56716d637370313031745148516a";
@@ -107,7 +108,7 @@ export default function Search({navigation}){
     // DB Bookmark GET
     let bookmarkData;
     const getBookmark = async () => {
-        let getData = await axios.get(`http://192.168.0.6:3000/bookmark/read`);
+        let getData = await axios.get(`http://${IPv4}:3000/bookmark/read`);
         bookmarkData = getData.data.result.filter(item => { 
             return item.idx == storageIdx;
         })
@@ -123,7 +124,7 @@ export default function Search({navigation}){
     const postBookmark = async (line, stnName, trnlineNm) => {
         try{
             console.log('postBookmark 접근중');
-            let url = `http://192.168.0.6:3000/bookmark/create`;
+            let url = `http://${IPv4}:3000/bookmark/create`;
             let data = {
                 idx:storageIdx,
                 line:line,

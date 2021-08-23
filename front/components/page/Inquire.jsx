@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Modal } from "react-native";
 import { Entypo } from '@expo/vector-icons';
 
+import IPv4 from '../../ipconfig';
+
 export default function Inquire(){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -20,7 +22,7 @@ export default function Inquire(){
         } else{
             try{
                 console.log('111까지 옴');
-                let url = `http://192.168.0.14:3000/inquire/create`;
+                let url = `http://${IPv4}:3000/inquire/create`;
                 let data = {
                     title:title,
                     content:content,

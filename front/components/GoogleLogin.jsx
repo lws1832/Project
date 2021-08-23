@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Google from 'expo-google-app-auth';
 
+import IPv4 from '../ipconfig';
 import { CredentialsContext } from './store/CredentialsContext';
 
 const GoogleLogin = ({ navigation }) => {
@@ -34,7 +35,7 @@ const GoogleLogin = ({ navigation }) => {
             }
             console.log('Login Data : ', data);
 
-            const url = 'http://192.168.0.6:3000/user/create';
+            const url = `http://${IPv4}:3000/user/create`;
             try{
               fetch(url, {
                 method: 'POST',
