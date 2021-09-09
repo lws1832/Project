@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from 'react-native';
 
+import IPv4 from "../../ipconfig";
+
 export default function UserName() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch('http://192.168.0.14:3000/user/read', {
+        fetch(`http://${IPv4}:3000/user/read`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

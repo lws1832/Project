@@ -17,19 +17,19 @@ let read = async (req, res) => {
     } catch (e) {
         console.error(e);
     }
-
 }
 
 let create = async (req, res) => {
     console.log('/user/create 접근');
+    // 사용자가 총 몇명인지 확인 가능한 id값이 존재해야할거 같음
+    let { accessToken, idx, name, email } = req.body;
 
-    let { accessToken, id, name, email } = req.body;
-
-    console.log('req.body : ', accessToken, id, name, email);
+    // console.log('req.body : ', accessToken,id, name, email);
     try {
         let result = await User.create({
-            accessToken: accessToken,
-            id: id,
+
+            accessToken:accessToken,
+            idx: idx,
             nickname: name,
             user_email: email,
         })
@@ -71,21 +71,22 @@ let update = async (req, res) => {
 let destroy = async (req, res) => {
     console.log('/user/destroy 접근');
 
-    let { id } = req.body;
-    console.log('req.body : ', id);
+    // let {id} = req.body;
+    // console.log('req.body : ',id);
 
     let result = await User.destroy({
+
         where: {
-            id: id,
+            idx: 1,
         }
     })
-    .then(result => {
-        console.log("success");
-    })
-    .catch(err => {
-        console.log("fail");
-    })
-    
+        .then(result => {
+            console.log("success");
+        })
+        .catch(err => {
+            console.log("fail");
+        })
+
     res.json({
         result,
     });

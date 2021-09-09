@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { CredentialsContext } from '../store/CredentialsContext';
 import Space from '../layout/Space';
-import Subject from '../layout/Subject';
 import Logout from '../layout/Logout';
 
-export default function Profile({navigation, isLogin}){
+export default function Profile({navigation}){
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+    const [storageName,setUStorageName]= useState('');
+
+    // 사용자 닉네임 가져오기
+    const getNickname = async () => {
+        try {
+            let value = await AsyncStorage.getItem('@User:Token');
+            let data = JSON.parse(value);
+            const nickName = data.name;
+            setUStorageName(nickName);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        getNickname();
+    }, []);
+
     const list = [
         {
             id: 1,
@@ -51,15 +71,19 @@ export default function Profile({navigation, isLogin}){
     return(
         <View style={styles.container}>
 
-            <Logout isLogin={isLogin} />
-            <Subject />
+            <Logout />
+
+            {/* 페이지 명 */}
+            <View style={styles.subject}>
+                <Text style={styles.title}>프로필</Text>
+            </View>
 
             {/* content */}
             <View style={styles.content}>
-                <View style={{flex:1}}>
-                    <Text style={styles.userName}>이우성님</Text>
+                <View style={{ flex:1 }}>
+                    <Text style={styles.userName}>{storageName != '' ? storageName : ''}님</Text>
                 </View>
-                <View style={{flex:5, marginVertical:50}}>
+                <View style={{ flex:5, marginVertical:50 }}>
                     <FlatList
                         data={list}
                         renderItem={renderList}
@@ -68,7 +92,6 @@ export default function Profile({navigation, isLogin}){
             </View>
 
             <Space />
-
         </View>
     )
 
@@ -84,6 +107,18 @@ const styles=StyleSheet.create({
     },
 
     /* content */
+    subject:{
+        flex:1,
+        justifyContent:"flex-start",
+        alignItems:"flex-start",
+    },
+    title:{
+        marginLeft:25,
+        marginVertical:10,
+        fontSize:40,
+        fontWeight:"bold",
+        color:"rgb(41, 128, 185)",
+    },
     userName:{
         marginHorizontal:25,
         fontSize:40,

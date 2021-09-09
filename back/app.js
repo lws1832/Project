@@ -13,7 +13,7 @@ const app = express();
 const { sequelize } = require('./models');
 const router = require('./routes');
 
-sequelize.sync({force: false,})
+sequelize.sync({force: false})
 .then(()=>{
     console.log('DB 연결 성공');
 })

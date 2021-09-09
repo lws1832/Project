@@ -3,13 +3,15 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import axios from 'axios';
 
+import IPv4 from '../../ipconfig';
+
 export default function NoticeList(){
     const [noticeList, setNoticeList] = useState([]);
     const [isRetrieve, setisRetrieve] = useState(false);
 
     useEffect(() => {
         const getNoticeList = async () => {
-            let result = await axios.get('http://192.168.0.9:3000/profile/notice/read');
+            let result = await axios.get(`http://${IPv4}:3000/profile/notice/read`);
 
             setNoticeList(result.data.result);
             if (noticeList != null){

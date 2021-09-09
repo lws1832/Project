@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Alert, TouchableOpacity, FlatList } from 'react
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import Space from '../layout/Space';
-import Subject from '../layout/Subject';
 
 export default function Bookmark(){
   const alertTest = () => {
@@ -46,7 +45,11 @@ export default function Bookmark(){
     <View style={styles.container}>
 
       <Space />
-      <Subject />
+      
+      {/* 페이지 명 */}
+      <View style={styles.subject}>
+          <Text style={styles.title}>북마크</Text>
+      </View>
 
       {/* content */}
       <View style={styles.content}>
@@ -82,6 +85,18 @@ const styles = StyleSheet.create({
   },
 
   /* content */
+  subject:{
+    flex:1,
+    justifyContent:"flex-start",
+    alignItems:"flex-start",
+  },
+  title:{
+      marginLeft:25,
+      marginVertical:10,
+      fontSize:40,
+      fontWeight:"bold",
+      color:"rgb(41, 128, 185)",
+  },
   bookmarkBox:{
     flex:1,
     marginHorizontal:25,
