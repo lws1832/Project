@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 import IPv4 from '../../ipconfig';
 import Space from '../layout/Space';
+import SearchCategory from './Search/SearchCategory';
 
 const API_KEY = "4e4e56716d637370313031745148516a";
 
@@ -35,7 +36,7 @@ export default function Search({navigation}){
     
     // 작업중
     const [storageIdx, setStorageIdx] = useState('');
-    const [bookmark, setBookmark] = useState(null);
+    const [bookmark, setBookmark] = useState([]);
 
     useEffect(() => {
         const getSubway = async () => {
@@ -108,16 +109,18 @@ export default function Search({navigation}){
     // DB Bookmark GET
     let bookmarkData;
     const getBookmark = async () => {
-        let getData = await axios.get(`http://${IPv4}:3000/bookmark/read`);
-        bookmarkData = getData.data.result.filter(item => { 
-            return item.idx == storageIdx;
-        })
-        setBookmark(bookmarkData);
-        console.log('aaa : ', bookmark);
-    }
-
-    const matchBM = (name, word) => {
-        return name == word;
+        try{
+            console.log('getBookmark 접근중');
+            let getData = await axios.get(`http://${IPv4}:3000/bookmark/read`);
+            console.log('모든 북마크 데이터 : ', getData.data);
+            bookmarkData = getData.data.result.filter(item => { 
+                return item.idx == storageIdx;
+            })
+            setBookmark(bookmarkData);
+            console.log('필터링 북마크 데이터 : ', bookmark);
+        } catch (e){
+            console.log(e);
+        }
     }
 
     // DB Bookmark POST
@@ -190,12 +193,7 @@ export default function Search({navigation}){
                                         <View style={styles.resultBox}>
                                             
                                             {/* 검색 결과 카테고리 */}
-                                            <View style={styles.resultCategory}>
-                                                <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>호선</Text>
-                                                <Text style={{...styles.ctgText, flex:2}}>역 이름</Text>
-                                                <Text style={{...styles.ctgText, flex:2}}>역 방향</Text>
-                                                <Text style={{...styles.ctgText, flex:1, textAlign:"center"}}>북마크</Text>
-                                            </View>
+                                            <SearchCategory />
                                             
                                             {/* 검색 결과 내용 */}
                                             <View style={styles.resultList}>
@@ -322,21 +320,44 @@ export default function Search({navigation}){
                                                                     </Text>
 
                                                                     {/* 북마크 */}
-                                                                    <TouchableOpacity
-                                                                        onPressIn={() => { postData(uniqData[k]) }}
-                                                                        onPressOut={() => postBookmark(line, stnName, trnlineNm)}
-                                                                        style={{ ...styles.listText, flex: 1, alignItems: "center" }}
-                                                                    >
-                                                                        <AntDesign
-                                                                            name="star"
-                                                                            size={20}
-                                                                            color={
-                                                                                bookmark == null /* 디비 연결 후 !=로 수정 */
-                                                                                ? "rgb(255, 204, 0)"
-                                                                                : "lightgray"
-                                                                            }
-                                                                        />
-                                                                    </TouchableOpacity>
+                                                                    {/* {
+                                                                        console.log('유니크데이터11 : ', uniqData)
+                                                                    } */}
+                                                                    {/* {
+                                                                        uniqData.map(z => {
+                                                                            return(
+                                                                                bookmark.map(a => {
+                                                                                    return(
+                                                                                        z.trainLineNm == a.direction
+                                                                                        ? <Text>1</Text>
+                                                                                        : <Text>2</Text>
+                                                                                        // ? console.log('맞음!')
+                                                                                        // : console.log('안맞음?')
+                                                                                    )
+                                                                                })
+                                                                            )
+                                                                        })
+                                                                    } */}
+                                                                    {
+                                                                        uniqData.map(uniq => {
+                                                                            return(
+                                                                                bookmark.filter(book => {
+                                                                                    // console.log('hiyo : ', book.direction)
+                                                                                    return uniq.trainLineNm == book.direction;
+                                                                                })
+                                                                                .map((a, k) => {
+                                                                                    console.log('씨씨씨씨 : ', a.direction)
+                                                                                    return <Text key={k}>하이</Text>
+                                                                                    // return a.direction;
+                                                                                })
+                                                                                // .map((b, k) => {
+                                                                                //     console.log('bbbb : ', b)
+                                                                                //     return <Text>하이</Text>;
+                                                                                //     // if ()
+                                                                                // })
+                                                                            )
+                                                                        })
+                                                                    }
                                                                 </View>
                                                             )
                                                         )
@@ -417,14 +438,6 @@ const styles = StyleSheet.create({
         flex:1,
         marginHorizontal:20,
         alignItems:"center",
-    },
-    resultCategory:{
-        flex:1,
-        height:30,
-        flexDirection:"row",
-        alignItems:"center",
-        borderRadius:5,
-        backgroundColor:"lightgray",
     },
     ctgText:{
         fontWeight:"bold",
